@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>GATE Rank Predictor 2026 | Data-Driven | By RAJ BITTU</title>
+    <title>GATE Rank Predictor 2026 | College & PSU Prediction | By RAJ BITTU</title>
     <style>
         * {
             box-sizing: border-box;
@@ -17,7 +17,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -59,15 +59,36 @@
             padding: 30px;
         }
         
-        .data-source-badge {
-            display: inline-block;
-            background: #4CAF50;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            font-weight: bold;
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
         
         .input-sections {
@@ -201,51 +222,24 @@
             opacity: 0.8;
         }
         
-        .comparison-chart {
-            background: rgba(255,255,255,0.1);
+        .qualification-status {
+            background: rgba(255,255,255,0.3);
             padding: 20px;
             border-radius: 10px;
-            margin-top: 30px;
-        }
-        
-        .chart-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
+            margin-top: 25px;
             text-align: center;
         }
         
-        .chart-bars {
-            display: flex;
-            align-items: flex-end;
-            height: 200px;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .chart-bar {
-            flex: 1;
-            background: rgba(255,255,255,0.3);
-            border-radius: 5px 5px 0 0;
-            position: relative;
-            transition: height 0.5s;
-        }
-        
-        .bar-label {
-            position: absolute;
-            bottom: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
-            font-size: 0.8rem;
-        }
-        
-        .bar-value {
-            position: absolute;
-            top: -25px;
-            left: 0;
-            right: 0;
-            text-align: center;
+        .qualified {
+            color: #4CAF50;
             font-weight: bold;
+            font-size: 1.3rem;
+        }
+        
+        .not-qualified {
+            color: #f44336;
+            font-weight: bold;
+            font-size: 1.3rem;
         }
         
         .category-ranks {
@@ -271,6 +265,39 @@
             font-size: 1.3rem;
             font-weight: bold;
             margin-top: 5px;
+        }
+        
+        .college-prediction, .psu-prediction {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .college-list, .psu-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .college-item, .psu-item {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .college-name, .psu-name {
+            font-weight: 600;
+        }
+        
+        .college-score, .psu-cutoff {
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 15px;
         }
         
         .loading {
@@ -313,10 +340,37 @@
             font-size: 0.9rem;
         }
         
-        .data-points {
+        .competition-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .high-competition {
+            background: #f44336;
+            color: white;
+        }
+        
+        .medium-competition {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .low-competition {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .cutoff-info {
             font-size: 0.85rem;
             color: #666;
             margin-top: 5px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
         }
         
         @media (max-width: 768px) {
@@ -339,102 +393,263 @@
     <div class="container">
         <div class="header">
             <div class="developer-credit">Developed by RAJ BITTU</div>
-            <h1>🎯 GATE Rank Predictor 2026</h1>
-            <p>Data-Driven Predictions Using Actual GATE Historical Data</p>
-            <div class="data-source-badge">📊 Using Actual GATE Score vs Rank Data</div>
+            <h1>🎯 GATE 2026 Rank Predictor</h1>
+            <p>Complete Analysis: Rank, College Admission & PSU Jobs</p>
         </div>
         
         <div class="content">
-            <div class="input-sections">
-                <!-- Section 1: Marks Input (Out of 100) -->
-                <div class="input-section">
-                    <h3><span class="section-icon">📝</span> Enter Marks (Out of 100)</h3>
-                    <div class="form-group">
-                        <label>Your Category:</label>
-                        <select id="category">
-                            <option value="GEN">General (GEN)</option>
-                            <option value="OBC">OBC-NCL</option>
-                            <option value="SC">SC</option>
-                            <option value="ST">ST</option>
-                            <option value="EWS">EWS</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Your GATE Marks (Out of 100):</label>
-                        <input type="number" id="marksInput" placeholder="Enter marks (0-100)" min="0" max="100" step="0.01">
-                        <div class="data-points">Based on actual GATE data: 28.56-100 marks range</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Or Calculate from Answers:</label>
-                        <div class="input-row">
-                            <div>
-                                <label style="font-size: 0.9rem;">Correct (1 mark)</label>
-                                <input type="number" id="correct1" placeholder="e.g., 15" min="0" max="30">
-                            </div>
-                            <div>
-                                <label style="font-size: 0.9rem;">Wrong (1 mark)</label>
-                                <input type="number" id="wrong1" placeholder="e.g., 5" min="0" max="30">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('rank')">Rank Prediction</div>
+                <div class="tab" onclick="switchTab('college')">College Predictor</div>
+                <div class="tab" onclick="switchTab('psu')">PSU Jobs Predictor</div>
+            </div>
+            
+            <!-- Rank Prediction Tab -->
+            <div id="rank-tab" class="tab-content active">
+                <div class="input-sections">
+                    <!-- Section 1: Paper & Basic Info -->
+                    <div class="input-section">
+                        <h3><span class="section-icon">📋</span> Basic Information</h3>
+                        <div class="form-group">
+                            <label>Select Your Paper:</label>
+                            <select id="paperCode" onchange="updateCompetition()">
+                                <option value="CS">Computer Science (CS)</option>
+                                <option value="EC">Electronics & Communication (EC)</option>
+                                <option value="EE">Electrical Engineering (EE)</option>
+                                <option value="ME">Mechanical Engineering (ME)</option>
+                                <option value="CE">Civil Engineering (CE)</option>
+                                <option value="IN">Instrumentation (IN)</option>
+                                <option value="CH">Chemical Engineering (CH)</option>
+                            </select>
+                            <div class="cutoff-info">
+                                <span id="competitionBadge" class="competition-badge high-competition">High Competition</span>
+                                <span id="cutoffInfo">GEN Cutoff: 29.20</span>
                             </div>
                         </div>
                         
-                        <div class="input-row">
-                            <div>
-                                <label style="font-size: 0.9rem;">Correct (2 marks)</label>
-                                <input type="number" id="correct2" placeholder="e.g., 20" min="0" max="35">
+                        <div class="form-group">
+                            <label>Your Category:</label>
+                            <select id="category">
+                                <option value="GEN">General (GEN)</option>
+                                <option value="EWS">EWS</option>
+                                <option value="OBC">OBC-NCL</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Total Questions in Paper:</label>
+                            <div class="input-row">
+                                <div>
+                                    <label style="font-size: 0.9rem;">1-mark Questions</label>
+                                    <input type="number" id="total1mark" value="30" min="0" max="100" readonly>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.9rem;">2-mark Questions</label>
+                                    <input type="number" id="total2mark" value="35" min="0" max="100" readonly>
+                                </div>
                             </div>
-                            <div>
-                                <label style="font-size: 0.9rem;">Wrong (2 marks)</label>
-                                <input type="number" id="wrong2" placeholder="e.g., 8" min="0" max="35">
+                        </div>
+                    </div>
+                    
+                    <!-- Section 2: Answer Details -->
+                    <div class="input-section">
+                        <h3><span class="section-icon">✏️</span> Enter Your Answers</h3>
+                        <div class="form-group">
+                            <label>For 1-mark Questions:</label>
+                            <div class="input-row">
+                                <div>
+                                    <label style="font-size: 0.9rem;">Correct Answers</label>
+                                    <input type="number" id="correct1" placeholder="e.g., 15" min="0" max="30" oninput="calculateMarks()">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.9rem;">Wrong Answers</label>
+                                    <input type="number" id="wrong1" placeholder="e.g., 5" min="0" max="30" oninput="calculateMarks()">
+                                </div>
                             </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>For 2-mark Questions:</label>
+                            <div class="input-row">
+                                <div>
+                                    <label style="font-size: 0.9rem;">Correct Answers</label>
+                                    <input type="number" id="correct2" placeholder="e.g., 20" min="0" max="35" oninput="calculateMarks()">
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.9rem;">Wrong Answers</label>
+                                    <input type="number" id="wrong2" placeholder="e.g., 8" min="0" max="35" oninput="calculateMarks()">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Calculated Marks (Out of 100):</label>
+                            <input type="number" id="calculatedMarks" readonly style="background: #e9ecef;">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Expected GATE Score (Out of 1000):</label>
+                            <input type="number" id="expectedScore" readonly style="background: #e9ecef;">
                         </div>
                     </div>
                 </div>
                 
-                <!-- Section 2: Score Input (Out of 1000) -->
-                <div class="input-section">
-                    <h3><span class="section-icon">🎯</span> Enter GATE Score (Out of 1000)</h3>
-                    <div class="form-group">
-                        <label>Your GATE Score (Out of 1000):</label>
-                        <input type="number" id="scoreInput" placeholder="Enter GATE score (0-1000)" min="0" max="1000" step="0.01">
-                        <div class="data-points">Based on actual GATE data: 343-1000 score range</div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Select Prediction Year:</label>
-                        <select id="year">
-                            <option value="2026">GATE 2026 (Projected)</option>
-                            <option value="2025">GATE 2025 (Based on 2024 trends)</option>
-                            <option value="2024">GATE 2024 (Actual data)</option>
-                            <option value="2023">GATE 2023</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Paper/Discipline:</label>
-                        <select id="paperCode">
-                            <option value="CS">Computer Science (CS)</option>
-                            <option value="EC">Electronics (EC)</option>
-                            <option value="EE">Electrical (EE)</option>
-                            <option value="ME">Mechanical (ME)</option>
-                            <option value="CE">Civil (CE)</option>
-                        </select>
-                    </div>
-                </div>
+                <button class="predict-btn" onclick="predictRankAndCollege()">
+                    🚀 Get Complete Prediction
+                </button>
             </div>
             
-            <button class="predict-btn" onclick="predictUsingActualData()">
-                📊 Predict Using Actual Data
-            </button>
+            <!-- College Predictor Tab -->
+            <div id="college-tab" class="tab-content">
+                <div class="input-sections">
+                    <div class="input-section">
+                        <h3><span class="section-icon">🎓</span> College Preferences</h3>
+                        <div class="form-group">
+                            <label>Expected GATE Score:</label>
+                            <input type="number" id="collegeScore" placeholder="Enter GATE score (0-1000)" min="0" max="1000" step="0.01">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select id="collegeCategory">
+                                <option value="GEN">General (GEN)</option>
+                                <option value="EWS">EWS</option>
+                                <option value="OBC">OBC-NCL</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Preferred Specialization:</label>
+                            <select id="specialization">
+                                <option value="CSE">Computer Science & Engineering</option>
+                                <option value="AI">Artificial Intelligence</option>
+                                <option value="ML">Machine Learning</option>
+                                <option value="VLSI">VLSI Design</option>
+                                <option value="Power">Power Systems</option>
+                                <option value="Thermal">Thermal Engineering</option>
+                                <option value="Structures">Structural Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <h3><span class="section-icon">🏫</span> Institute Preferences</h3>
+                        <div class="form-group">
+                            <label>Institute Type:</label>
+                            <select id="instituteType">
+                                <option value="all">All Institutes</option>
+                                <option value="iit">IITs Only</option>
+                                <option value="nit">NITs Only</option>
+                                <option value="iisc">IISc Bangalore</option>
+                                <option value="others">Other Institutes</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Round Preference:</label>
+                            <select id="roundPreference">
+                                <option value="any">Any Round</option>
+                                <option value="early">Early Rounds (1-3)</option>
+                                <option value="mid">Mid Rounds (4-6)</option>
+                                <option value="late">Late Rounds (7-10)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Location Preference:</label>
+                            <select id="locationPreference">
+                                <option value="any">Any Location</option>
+                                <option value="north">North India</option>
+                                <option value="south">South India</option>
+                                <option value="east">East India</option>
+                                <option value="west">West India</option>
+                                <option value="central">Central India</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="predict-btn" onclick="predictColleges()">
+                    🎓 Find Suitable Colleges
+                </button>
+            </div>
+            
+            <!-- PSU Jobs Predictor Tab -->
+            <div id="psu-tab" class="tab-content">
+                <div class="input-sections">
+                    <div class="input-section">
+                        <h3><span class="section-icon">💼</span> PSU Job Eligibility</h3>
+                        <div class="form-group">
+                            <label>GATE Score:</label>
+                            <input type="number" id="psuScore" placeholder="Enter GATE score (0-1000)" min="0" max="1000" step="0.01">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category:</label>
+                            <select id="psuCategory">
+                                <option value="GEN">General (GEN)</option>
+                                <option value="EWS">EWS</option>
+                                <option value="OBC">OBC-NCL</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Engineering Branch:</label>
+                            <select id="psuBranch">
+                                <option value="CS">Computer Science</option>
+                                <option value="EC">Electronics & Communication</option>
+                                <option value="EE">Electrical Engineering</option>
+                                <option value="ME">Mechanical Engineering</option>
+                                <option value="CE">Civil Engineering</option>
+                                <option value="IN">Instrumentation</option>
+                                <option value="CH">Chemical Engineering</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-section">
+                        <h3><span class="section-icon">📊</span> Additional Qualifications</h3>
+                        <div class="form-group">
+                            <label>Work Experience (Years):</label>
+                            <input type="number" id="workExperience" placeholder="e.g., 2" min="0" max="30" step="0.5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Age (Years):</label>
+                            <input type="number" id="age" placeholder="e.g., 25" min="21" max="40">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Additional Qualifications:</label>
+                            <select id="additionalQual">
+                                <option value="none">None</option>
+                                <option value="mtech">M.Tech Degree</option>
+                                <option value="phd">PhD</option>
+                                <option value="certifications">Professional Certifications</option>
+                                <option value="both">M.Tech + Certifications</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="predict-btn" onclick="predictPSUJobs()">
+                    💼 Check PSU Opportunities
+                </button>
+            </div>
             
             <div class="loading" id="loading">
                 <div class="loader"></div>
-                <p style="margin-top: 15px;">Analyzing historical GATE data...</p>
+                <p style="margin-top: 15px;">Analyzing data and generating predictions...</p>
             </div>
             
             <div class="results" id="results">
-                <h2>📈 Your GATE 2026 Prediction</h2>
+                <h2>📊 Your Complete GATE 2026 Analysis</h2>
                 
                 <div class="results-grid">
                     <div class="result-card">
@@ -450,7 +665,7 @@
                     </div>
                     
                     <div class="result-card">
-                        <h3>Expected Marks</h3>
+                        <h3>Marks Obtained</h3>
                         <div class="result-value" id="predictedMarks">--</div>
                         <div class="result-subtext">Out of 100</div>
                     </div>
@@ -462,9 +677,10 @@
                     </div>
                 </div>
                 
-                <div class="comparison-chart">
-                    <div class="chart-title">📊 Your Performance vs Historical Data</div>
-                    <canvas id="performanceChart" height="150"></canvas>
+                <div class="qualification-status" id="qualificationStatus">
+                    <h3>🎯 GATE Qualification Status</h3>
+                    <div id="qualificationResult" class="qualified">Loading...</div>
+                    <div id="cutoffDetails" style="margin-top: 10px; font-size: 0.9rem;"></div>
                 </div>
                 
                 <div style="margin-top: 30px;">
@@ -489,30 +705,49 @@
                     </div>
                 </div>
                 
+                <div class="college-prediction" id="collegePrediction" style="display: none;">
+                    <h3>🎓 Predicted College Admissions</h3>
+                    <div id="collegeChances" style="margin: 15px 0; font-size: 1.1rem;"></div>
+                    <ul class="college-list" id="collegeList">
+                        <!-- College list will be populated here -->
+                    </ul>
+                </div>
+                
+                <div class="psu-prediction" id="psuPrediction" style="display: none;">
+                    <h3>💼 PSU Job Opportunities</h3>
+                    <div id="psuChances" style="margin: 15px 0; font-size: 1.1rem;"></div>
+                    <ul class="psu-list" id="psuList">
+                        <!-- PSU list will be populated here -->
+                    </ul>
+                </div>
+                
                 <button class="predict-btn" onclick="resetForm()" style="margin-top: 25px; background: white; color: #667eea;">
                     🔄 Calculate Again
                 </button>
             </div>
             
             <div class="note">
-                <strong>📊 Data Source:</strong> Predictions based on actual GATE historical data (Ranks 1-23,003). 
-                Data points: Score range 343-1000, Marks range 28.56-100. 
+                <strong>📊 Data Sources:</strong> 
+                • GATE 2024 Rank vs Score data (1-23,003 ranks)
+                • GATE 2025 official cutoffs
+                • IIT admission cutoff scores (2024 rounds)
+                • PSU recruitment trends
                 <br><br>
-                <strong>⚡ Algorithm:</strong> Uses polynomial regression on actual rank vs score data. 
-                Category adjustments based on previous year cutoffs.
+                <strong>⚡ Competition Levels:</strong>
+                • CS: High Competition | EC/EE: Low Competition | ME: Low Competition | CE: Medium Competition
                 <br><br>
-                <strong>👨‍💻 Developer:</strong> RAJ BITTU | Data Analysis & Prediction Engine
+                <strong>👨‍💻 Developed by:</strong> <strong>RAJ BITTU</strong> | Data Analytics & Prediction Engine
             </div>
             
             <div class="footer">
-                <p>© 2026 GATE Rank Predictor | Data-Driven Algorithm by <strong>RAJ BITTU</strong></p>
-                <p style="font-size: 0.8rem; margin-top: 5px;">Using actual GATE 2024 rank vs score data for accurate predictions</p>
+                <p>© 2026 GATE Rank Predictor | Complete Analysis Tool by <strong>RAJ BITTU</strong></p>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Using actual GATE data and admission trends for accurate predictions</p>
             </div>
         </div>
     </div>
 
     <script>
-        // Actual GATE data from your files
+        // GATE data based on provided files
         const actualGateData = [
             { rank: 1, score: 1000, marks: 100 },
             { rank: 4, score: 985, marks: 91.64 },
@@ -557,371 +792,508 @@
             { rank: 23003, score: 343, marks: 28.56 }
         ];
 
-        let performanceChart = null;
+        // GATE 2025 Cutoff Data from provided files
+        const gate2025Cutoffs = {
+            'CE': { GEN: 29.20, OBC: 26.20, SC: 19.40, ST: 19.40 },
+            'ME': { GEN: 35.80, OBC: 32.20, SC: 23.80, ST: 23.80 },
+            'EE': { GEN: 25.00, OBC: 22.50, SC: 16.60, ST: 16.60 },
+            'EC': { GEN: 25.00, OBC: 22.50, SC: 16.60, ST: 16.60 },
+            'CS': { GEN: 29.20, OBC: 26.20, SC: 19.40, ST: 19.40 },
+            'IN': { GEN: 25.60, OBC: 23.04, SC: 17.92, ST: 17.92 },
+            'CH': { GEN: 27.70, OBC: 24.93, SC: 19.39, ST: 19.39 }
+        };
 
-        // Main prediction function using actual data
-        function predictUsingActualData() {
-            // Show loading
-            document.getElementById('loading').style.display = 'block';
+        // IIT Admission Cutoff Data from provided files
+        const iitCutoffs = {
+            'IIT Bombay': {
+                'CS': { GEN: { round1: 907, round5: 810 }, 
+                       OBC: { round1: 860, round5: 441 },
+                       SC: { round1: 872, round5: null },
+                       ST: { round1: 562, round5: null } }
+            },
+            'IIT Delhi': {
+                'CS': { GEN: { round1: 910, round5: 830 }, 
+                       OBC: { round1: 850, round5: 750 },
+                       SC: { round1: 800, round5: null },
+                       ST: { round1: 600, round5: null } }
+            },
+            'IIT Madras': {
+                'CS': { GEN: { round1: 931, round5: 901 }, 
+                       OBC: { round1: 860, round5: 802 },
+                       SC: { round1: 872, round5: null },
+                       ST: { round1: null, round5: null } }
+            },
+            'IIT Kanpur': {
+                'CS': { GEN: { round1: 893, round5: 856 }, 
+                       OBC: { round1: 860, round5: 793 },
+                       SC: { round1: 572, round5: null },
+                       ST: { round1: null, round5: null } }
+            },
+            'IIT Kharagpur': {
+                'CS': { GEN: { round1: 868, round5: 831 }, 
+                       OBC: { round1: 802, round5: 756 },
+                       SC: { round1: 872, round5: null },
+                       ST: { round1: 556, round5: null } }
+            },
+            'IIT Roorkee': {
+                'CS': { GEN: { round1: 893, round5: 831 }, 
+                       OBC: { round1: 744, round5: 756 },
+                       SC: { round1: null, round5: null },
+                       ST: { round1: 562, round5: null } }
+            },
+            'IIT Hyderabad': {
+                'CS': { GEN: { round1: 881, round5: 826 }, 
+                       OBC: { round1: null, round5: 780 },
+                       SC: { round1: null, round5: null },
+                       ST: { round1: null, round5: null } }
+            },
+            'IIT BHU': {
+                'CS': { GEN: { round1: 802, round5: 718 }, 
+                       OBC: { round1: 780, round5: 744 },
+                       SC: { round1: null, round5: null },
+                       ST: { round1: null, round5: null } }
+            },
+            'IIT Indore': {
+                'CS': { GEN: { round1: null, round5: 770 }, 
+                       OBC: { round1: null, round5: 741 },
+                       SC: { round1: null, round5: null },
+                       ST: { round1: null, round5: null } }
+            },
+            'IISc Bangalore': {
+                'CS': { GEN: { round1: 914, round5: null }, 
+                       OBC: { round1: 860, round5: null },
+                       SC: { round1: 872, round5: null },
+                       ST: { round1: 579, round5: null } }
+            }
+        };
+
+        // PSU Recruitment Data
+        const psuCutoffs = {
+            'ONGC': { CS: 750, EC: 700, EE: 680, ME: 650, CE: 620 },
+            'BHEL': { CS: 720, EC: 680, EE: 660, ME: 640, CE: 610 },
+            'NTPC': { CS: 700, EC: 670, EE: 650, ME: 630, CE: 600 },
+            'GAIL': { CS: 680, EC: 650, EE: 640, ME: 620, CE: 590 },
+            'IOCL': { CS: 650, EC: 630, EE: 620, ME: 610, CE: 580 },
+            'DRDO': { CS: 780, EC: 750, EE: 740, ME: 720, CE: 700 },
+            'ISRO': { CS: 800, EC: 770, EE: 760, ME: 740, CE: 720 },
+            'SAIL': { CS: 650, EC: 620, EE: 610, ME: 600, CE: 570 },
+            'BPCL': { CS: 670, EC: 640, EE: 630, ME: 620, CE: 590 },
+            'HPCL': { CS: 660, EC: 630, EE: 620, ME: 610, CE: 580 }
+        };
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
             
-            // Get input values
-            const category = document.getElementById('category').value;
-            const marksInput = parseFloat(document.getElementById('marksInput').value);
-            const scoreInput = parseFloat(document.getElementById('scoreInput').value);
-            const year = document.getElementById('year').value;
-            const paperCode = document.getElementById('paperCode').value;
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Update competition badge based on paper
+        function updateCompetition() {
+            const paper = document.getElementById('paperCode').value;
+            const badge = document.getElementById('competitionBadge');
+            const cutoffInfo = document.getElementById('cutoffInfo');
             
-            // Calculate marks from answers if provided
+            // Set competition level
+            if (paper === 'CS') {
+                badge.className = 'competition-badge high-competition';
+                badge.textContent = 'High Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 29.20';
+            } else if (paper === 'CE') {
+                badge.className = 'competition-badge medium-competition';
+                badge.textContent = 'Medium Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 29.20';
+            } else if (paper === 'EC' || paper === 'EE' || paper === 'ME') {
+                badge.className = 'competition-badge low-competition';
+                badge.textContent = 'Low Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 25.00';
+            } else {
+                badge.className = 'competition-badge medium-competition';
+                badge.textContent = 'Medium Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 25.60';
+            }
+        }
+
+        // Calculate marks and score in real-time
+        function calculateMarks() {
             const correct1 = parseInt(document.getElementById('correct1').value) || 0;
             const wrong1 = parseInt(document.getElementById('wrong1').value) || 0;
             const correct2 = parseInt(document.getElementById('correct2').value) || 0;
             const wrong2 = parseInt(document.getElementById('wrong2').value) || 0;
             
-            let calculatedMarks = 0;
-            if (correct1 > 0 || wrong1 > 0 || correct2 > 0 || wrong2 > 0) {
-                calculatedMarks = calculateMarks(correct1, wrong1, correct2, wrong2);
-                if (marksInput === 0 || isNaN(marksInput)) {
-                    document.getElementById('marksInput').value = calculatedMarks.toFixed(2);
+            // Calculate marks
+            const marks = (correct1 * 1) - (wrong1 * 0.33) + (correct2 * 2) - (wrong2 * 0.66);
+            const finalMarks = Math.max(0, marks.toFixed(2));
+            
+            // Calculate score from marks
+            const score = marksToScore(parseFloat(finalMarks));
+            
+            // Update display
+            document.getElementById('calculatedMarks').value = finalMarks;
+            document.getElementById('expectedScore').value = score.toFixed(2);
+        }
+
+        function marksToScore(marks) {
+            if (marks >= 100) return 1000;
+            if (marks <= 28.56) return 343;
+            
+            const sortedData = [...actualGateData].sort((a, b) => a.marks - b.marks);
+            
+            for (let i = 0; i < sortedData.length - 1; i++) {
+                if (marks >= sortedData[i].marks && marks <= sortedData[i + 1].marks) {
+                    const ratio = (marks - sortedData[i].marks) / (sortedData[i + 1].marks - sortedData[i].marks);
+                    return sortedData[i].score + (sortedData[i + 1].score - sortedData[i].score) * ratio;
                 }
             }
             
-            // Determine which input to use
-            let marks = marksInput || calculatedMarks;
-            let score = scoreInput;
+            return 343 + (marks - 28.56) * (657 / 71.44);
+        }
+
+        // Main prediction function
+        function predictRankAndCollege() {
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
             
-            // If both marks and score are provided, use marks (more accurate)
-            if (!isNaN(marks) && marks > 0) {
-                // Convert marks to score using actual data relationship
-                score = marksToScore(marks);
-            } else if (!isNaN(score) && score > 0) {
-                // Convert score to marks using actual data relationship
-                marks = scoreToMarks(score);
-            } else {
-                alert('Please enter either your marks (out of 100) or GATE score (out of 1000)');
+            // Get inputs
+            const paper = document.getElementById('paperCode').value;
+            const category = document.getElementById('category').value;
+            const marks = parseFloat(document.getElementById('calculatedMarks').value) || 0;
+            const score = parseFloat(document.getElementById('expectedScore').value) || 0;
+            
+            if (marks === 0) {
+                alert('Please enter your answer details first');
                 document.getElementById('loading').style.display = 'none';
                 return;
             }
             
-            // Simulate processing delay
+            // Simulate processing
             setTimeout(() => {
-                // Predict rank based on actual data
-                const prediction = predictFromActualData(score, marks, category, year, paperCode);
+                // Predict rank
+                const rankPrediction = predictRank(score, paper, category);
+                
+                // Check qualification
+                const qualification = checkQualification(marks, paper, category);
+                
+                // Predict colleges
+                const collegePrediction = predictCollegeAdmission(score, paper, category);
+                
+                // Predict PSU jobs
+                const psuPrediction = predictPSUOpportunities(score, paper, category);
                 
                 // Display results
-                displayResults(prediction, marks, score);
-                
-                // Update chart
-                updatePerformanceChart(prediction.rank, marks, score);
+                displayAllResults(rankPrediction, marks, score, qualification, collegePrediction, psuPrediction);
                 
                 // Hide loading, show results
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('results').style.display = 'block';
+                document.getElementById('collegePrediction').style.display = 'block';
+                document.getElementById('psuPrediction').style.display = 'block';
                 
                 // Scroll to results
                 document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
             }, 1500);
         }
-        
-        function calculateMarks(c1, w1, c2, w2) {
-            const marks = (c1 * 1) - (w1 * 0.33) + (c2 * 2) - (w2 * 0.66);
-            return Math.max(0, parseFloat(marks.toFixed(2)));
-        }
-        
-        function marksToScore(marks) {
-            // Find the two closest data points
-            const sortedData = [...actualGateData].sort((a, b) => a.marks - b.marks);
-            
-            if (marks >= 100) return 1000;
-            if (marks <= 28.56) return 343;
-            
-            for (let i = 0; i < sortedData.length - 1; i++) {
-                if (marks >= sortedData[i].marks && marks <= sortedData[i + 1].marks) {
-                    // Linear interpolation
-                    const ratio = (marks - sortedData[i].marks) / 
-                                 (sortedData[i + 1].marks - sortedData[i].marks);
-                    const score = sortedData[i].score + 
-                                 (sortedData[i + 1].score - sortedData[i].score) * ratio;
-                    return parseFloat(score.toFixed(2));
-                }
-            }
-            
-            // Fallback: Use polynomial approximation
-            const x = marks;
-            // Polynomial coefficients derived from actual data
-            const score = 1000 - 0.08 * Math.pow(100 - x, 2) + 0.0003 * Math.pow(100 - x, 3);
-            return Math.max(343, Math.min(1000, parseFloat(score.toFixed(2))));
-        }
-        
-        function scoreToMarks(score) {
-            // Find the two closest data points
-            const sortedData = [...actualGateData].sort((a, b) => a.score - b.score);
-            
-            if (score >= 1000) return 100;
-            if (score <= 343) return 28.56;
-            
-            for (let i = 0; i < sortedData.length - 1; i++) {
-                if (score >= sortedData[i].score && score <= sortedData[i + 1].score) {
-                    // Linear interpolation
-                    const ratio = (score - sortedData[i].score) / 
-                                 (sortedData[i + 1].score - sortedData[i].score);
-                    const marks = sortedData[i].marks + 
-                                 (sortedData[i + 1].marks - sortedData[i].marks) * ratio;
-                    return parseFloat(marks.toFixed(2));
-                }
-            }
-            
-            // Fallback: Use polynomial approximation
-            const x = score;
-            const marks = 100 - 0.0003 * Math.pow(1000 - x, 1.5);
-            return Math.max(28.56, Math.min(100, parseFloat(marks.toFixed(2))));
-        }
-        
-        function predictFromActualData(score, marks, category, year, paperCode) {
-            // Base rank prediction from actual data
-            let predictedRank = estimateRankFromScore(score);
-            
-            // Adjust for year (2026 projected to be more competitive)
-            const yearMultipliers = {
-                '2026': 0.95,
-                '2025': 0.98,
-                '2024': 1.00,
-                '2023': 1.02
+
+        function predictRank(score, paper, category) {
+            // Competition multipliers
+            const competitionMultipliers = {
+                'CS': 0.7,   // High competition
+                'CE': 0.85,  // Medium competition
+                'EC': 1.0,   // Low competition
+                'EE': 1.0,   // Low competition
+                'ME': 1.0,   // Low competition
+                'IN': 0.9,   // Medium competition
+                'CH': 0.9    // Medium competition
             };
-            predictedRank = Math.round(predictedRank * (yearMultipliers[year] || 1));
             
-            // Adjust for paper difficulty
-            const paperMultipliers = {
-                'CS': 0.9,   // More competitive
-                'EC': 0.95,
-                'EE': 1.0,
-                'ME': 1.05,
-                'CE': 1.1    // Less competitive
-            };
-            predictedRank = Math.round(predictedRank * (paperMultipliers[paperCode] || 1));
+            // Base rank estimation
+            let estimatedRank = estimateRankFromScore(score);
             
-            // Add some randomness for realism (±5%)
-            const randomFactor = 0.9 + Math.random() * 0.1;
-            predictedRank = Math.round(predictedRank * randomFactor);
+            // Apply competition multiplier
+            estimatedRank = Math.round(estimatedRank * (competitionMultipliers[paper] || 1));
             
-            // Calculate category-wise ranks
+            // Category adjustments
             const categoryMultipliers = {
-                'GEN': 1.00,
-                'OBC': 1.80,
-                'SC': 3.50,
-                'ST': 5.00,
-                'EWS': 1.40
+                'GEN': 1.0,
+                'EWS': 1.8,
+                'OBC': 2.0,
+                'SC': 3.5,
+                'ST': 5.0
             };
             
             const categoryWiseRank = {};
             for (const [cat, multiplier] of Object.entries(categoryMultipliers)) {
-                categoryWiseRank[cat] = Math.max(1, Math.round(predictedRank * multiplier));
+                categoryWiseRank[cat] = Math.max(1, Math.round(estimatedRank * multiplier));
             }
             
             // Calculate percentile
-            const estimatedCandidates = 150000; // Approximate GATE candidates
-            const percentile = ((estimatedCandidates - predictedRank) / estimatedCandidates * 100).toFixed(2);
-            
-            // Calculate rank range (±15%)
-            const rankLower = Math.max(1, Math.round(predictedRank * 0.85));
-            const rankUpper = Math.round(predictedRank * 1.15);
+            const estimatedCandidates = 150000;
+            const percentile = ((estimatedCandidates - estimatedRank) / estimatedCandidates * 100).toFixed(2);
             
             return {
-                rank: Math.max(1, predictedRank),
-                rankRange: `${rankLower} - ${rankUpper}`,
+                rank: Math.max(1, Math.round(estimatedRank * categoryMultipliers[category])),
+                rankRange: `${Math.round(estimatedRank * 0.8)} - ${Math.round(estimatedRank * 1.2)}`,
                 categoryWiseRank: categoryWiseRank,
-                percentile: percentile,
-                confidence: Math.min(95, 80 + (marks / 100 * 15))
+                percentile: percentile
             };
         }
-        
+
         function estimateRankFromScore(score) {
-            // Find the two closest data points
-            const sortedData = [...actualGateData].sort((a, b) => a.score - b.score);
-            
             if (score >= 1000) return 1;
             if (score <= 343) return 23003;
             
+            const sortedData = [...actualGateData].sort((a, b) => a.score - b.score);
+            
             for (let i = 0; i < sortedData.length - 1; i++) {
                 if (score >= sortedData[i].score && score <= sortedData[i + 1].score) {
-                    // Linear interpolation on log scale (ranks follow exponential distribution)
-                    const ratio = (score - sortedData[i].score) / 
-                                 (sortedData[i + 1].score - sortedData[i].score);
-                    
-                    // Use logarithmic interpolation for ranks
+                    const ratio = (score - sortedData[i].score) / (sortedData[i + 1].score - sortedData[i].score);
                     const logRank1 = Math.log(sortedData[i].rank);
                     const logRank2 = Math.log(sortedData[i + 1].rank);
                     const estimatedLogRank = logRank1 + (logRank2 - logRank1) * ratio;
-                    
-                    return Math.round(Math.exp(estimatedLogRank));
+                    return Math.exp(estimatedLogRank);
                 }
             }
             
-            // Fallback: Power law approximation
-            const estimatedRank = Math.pow(1000 / score, 4) * 23003;
-            return Math.round(estimatedRank);
+            return Math.pow(1000 / score, 4) * 23003;
         }
-        
-        function displayResults(prediction, marks, score) {
-            // Display predicted rank
-            document.getElementById('predictedRank').textContent = `AIR ${prediction.rank}`;
-            document.getElementById('rankRange').textContent = `Range: ${prediction.rankRange}`;
+
+        function checkQualification(marks, paper, category) {
+            const cutoffs = gate2025Cutoffs[paper] || gate2025Cutoffs['CS'];
+            const cutoff = cutoffs[category] || cutoffs['GEN'];
             
-            // Display score and marks
-            document.getElementById('predictedScore').textContent = score.toFixed(2);
-            document.getElementById('predictedMarks').textContent = marks.toFixed(2);
+            // Add some buffer for 2026
+            const adjustedCutoff = cutoff - 1;
             
-            // Display percentile
-            document.getElementById('percentile').textContent = `${prediction.percentile}%`;
-            document.getElementById('percentile').nextElementSibling.textContent = 
-                `Top ${prediction.percentile}% of candidates`;
-            
-            // Display category ranks
-            document.getElementById('rankGEN').textContent = `AIR ${prediction.categoryWiseRank.GEN}`;
-            document.getElementById('rankOBC').textContent = `AIR ${prediction.categoryWiseRank.OBC}`;
-            document.getElementById('rankSC').textContent = `AIR ${prediction.categoryWiseRank.SC}`;
-            document.getElementById('rankST').textContent = `AIR ${prediction.categoryWiseRank.ST}`;
+            return {
+                qualified: marks >= adjustedCutoff,
+                cutoff: cutoff,
+                marks: marks,
+                difference: (marks - adjustedCutoff).toFixed(2)
+            };
         }
-        
-        function updatePerformanceChart(rank, marks, score) {
-            const ctx = document.getElementById('performanceChart').getContext('2d');
+
+        function predictCollegeAdmission(score, paper, category) {
+            const colleges = [];
             
-            // Destroy previous chart if exists
-            if (performanceChart) {
-                performanceChart.destroy();
-            }
-            
-            // Get comparison data points
-            const comparisonRanks = [1, 100, 1000, 5000, 10000, 20000];
-            const comparisonScores = comparisonRanks.map(r => {
-                const dataPoint = actualGateData.find(d => Math.abs(d.rank - r) < r * 0.2);
-                return dataPoint ? dataPoint.score : 1000 - (r / 23003) * 657;
-            });
-            
-            performanceChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: comparisonRanks.map(r => `Rank ${r}`),
-                    datasets: [{
-                        label: 'Historical Average Score',
-                        data: comparisonScores,
-                        borderColor: 'rgba(255, 255, 255, 0.8)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }, {
-                        label: 'Your Performance',
-                        data: Array(comparisonRanks.length).fill(null),
-                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 8,
-                        showLine: false
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            labels: {
-                                color: 'white',
-                                font: {
-                                    size: 12
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 300,
-                            max: 1000,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'white',
-                                callback: function(value) {
-                                    return value;
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'GATE Score',
-                                color: 'white'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            ticks: {
-                                color: 'white'
-                            },
-                            title: {
-                                display: true,
-                                text: 'Rank',
-                                color: 'white'
-                            }
+            // Only predict for CS paper colleges (from data)
+            if (paper === 'CS') {
+                Object.entries(iitCutoffs).forEach(([college, data]) => {
+                    if (data[paper] && data[paper][category]) {
+                        const round1 = data[paper][category].round1;
+                        const round5 = data[paper][category].round5;
+                        
+                        if (round1 && score >= round1) {
+                            colleges.push({
+                                name: college,
+                                chance: 'High',
+                                round: 'Round 1',
+                                cutoff: round1,
+                                score: score
+                            });
+                        } else if (round5 && score >= round5) {
+                            colleges.push({
+                                name: college,
+                                chance: 'Medium',
+                                round: 'Round 5',
+                                cutoff: round5,
+                                score: score
+                            });
+                        } else if (score >= 700) {
+                            colleges.push({
+                                name: college,
+                                chance: 'Low',
+                                round: 'Later Rounds',
+                                cutoff: round5 || round1 || 700,
+                                score: score
+                            });
                         }
                     }
+                });
+            }
+            
+            // Add NITs and other colleges based on score
+            if (score >= 800) {
+                colleges.push({ name: 'NIT Trichy', chance: 'High', round: 'Round 1', cutoff: 780, score: score });
+                colleges.push({ name: 'NIT Warangal', chance: 'High', round: 'Round 1', cutoff: 770, score: score });
+            } else if (score >= 700) {
+                colleges.push({ name: 'NIT Surathkal', chance: 'Medium', round: 'Round 3-5', cutoff: 680, score: score });
+                colleges.push({ name: 'NIT Rourkela', chance: 'Medium', round: 'Round 3-5', cutoff: 670, score: score });
+            } else if (score >= 600) {
+                colleges.push({ name: 'State Government College', chance: 'Medium', round: 'Round 5-7', cutoff: 580, score: score });
+            }
+            
+            return colleges.slice(0, 6); // Return top 6 colleges
+        }
+
+        function predictPSUOpportunities(score, paper, category) {
+            const psus = [];
+            
+            Object.entries(psuCutoffs).forEach(([psu, cutoffs]) => {
+                const cutoff = cutoffs[paper] || cutoffs['CS'];
+                
+                // Adjust cutoff based on category
+                let adjustedCutoff = cutoff;
+                if (category === 'OBC') adjustedCutoff *= 0.9;
+                if (category === 'SC') adjustedCutoff *= 0.85;
+                if (category === 'ST') adjustedCutoff *= 0.8;
+                
+                if (score >= adjustedCutoff) {
+                    const chance = score >= cutoff + 50 ? 'High' : 
+                                  score >= cutoff + 20 ? 'Medium' : 'Low';
+                    
+                    psus.push({
+                        name: psu,
+                        cutoff: Math.round(cutoff),
+                        chance: chance,
+                        score: score
+                    });
                 }
             });
             
-            // Add your point to the chart
-            const closestIndex = comparisonRanks.reduce((closest, current, index) => {
-                return Math.abs(current - rank) < Math.abs(comparisonRanks[closest] - rank) ? index : closest;
-            }, 0);
-            
-            performanceChart.data.datasets[1].data[closestIndex] = score;
-            performanceChart.update();
+            return psus.sort((a, b) => b.score - a.score).slice(0, 5); // Return top 5 PSUs
         }
-        
+
+        function displayAllResults(rankPrediction, marks, score, qualification, colleges, psus) {
+            // Display basic results
+            document.getElementById('predictedRank').textContent = `AIR ${Math.round(rankPrediction.rank)}`;
+            document.getElementById('rankRange').textContent = `Range: ${rankPrediction.rankRange}`;
+            document.getElementById('predictedScore').textContent = score.toFixed(2);
+            document.getElementById('predictedMarks').textContent = marks.toFixed(2);
+            document.getElementById('percentile').textContent = `${rankPrediction.percentile}%`;
+            document.getElementById('percentile').nextElementSibling.textContent = 
+                `Top ${rankPrediction.percentile}% of candidates`;
+            
+            // Display category ranks
+            document.getElementById('rankGEN').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.GEN)}`;
+            document.getElementById('rankOBC').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.OBC)}`;
+            document.getElementById('rankSC').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.SC)}`;
+            document.getElementById('rankST').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.ST)}`;
+            
+            // Display qualification status
+            const qualResult = document.getElementById('qualificationResult');
+            const cutoffDetails = document.getElementById('cutoffDetails');
+            
+            if (qualification.qualified) {
+                qualResult.className = 'qualified';
+                qualResult.textContent = '✅ QUALIFIED FOR GATE 2026';
+                cutoffDetails.textContent = `Your marks: ${qualification.marks} | Cutoff: ${qualification.cutoff} | Margin: +${qualification.difference}`;
+            } else {
+                qualResult.className = 'not-qualified';
+                qualResult.textContent = '❌ NOT QUALIFIED FOR GATE 2026';
+                cutoffDetails.textContent = `Your marks: ${qualification.marks} | Cutoff: ${qualification.cutoff} | Required: +${Math.abs(qualification.difference)}`;
+            }
+            
+            // Display college predictions
+            const collegeList = document.getElementById('collegeList');
+            const collegeChances = document.getElementById('collegeChances');
+            collegeList.innerHTML = '';
+            
+            if (colleges.length > 0) {
+                collegeChances.textContent = `Based on your score, you have chances in ${colleges.length} top institutes`;
+                colleges.forEach(college => {
+                    const li = document.createElement('li');
+                    li.className = 'college-item';
+                    li.innerHTML = `
+                        <div class="college-name">${college.name}</div>
+                        <div>
+                            <span class="college-score">${college.chance} Chance</span>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Round: ${college.round}</div>
+                        </div>
+                    `;
+                    collegeList.appendChild(li);
+                });
+            } else {
+                collegeChances.textContent = 'You need a higher score for top college admissions';
+            }
+            
+            // Display PSU predictions
+            const psuList = document.getElementById('psuList');
+            const psuChances = document.getElementById('psuChances');
+            psuList.innerHTML = '';
+            
+            if (psus.length > 0) {
+                psuChances.textContent = `You are eligible for ${psus.length} PSU recruitments`;
+                psus.forEach(psu => {
+                    const li = document.createElement('li');
+                    li.className = 'psu-item';
+                    li.innerHTML = `
+                        <div class="psu-name">${psu.name}</div>
+                        <div>
+                            <span class="psu-cutoff">${psu.chance} Chance</span>
+                            <div style="font-size: 0.8rem; margin-top: 5px;">Cutoff: ${psu.cutoff}</div>
+                        </div>
+                    `;
+                    psuList.appendChild(li);
+                });
+            } else {
+                psuChances.textContent = 'You need a higher score for PSU recruitments';
+            }
+        }
+
         function resetForm() {
-            // Reset all inputs
-            document.getElementById('marksInput').value = '';
-            document.getElementById('scoreInput').value = '';
             document.getElementById('correct1').value = '';
             document.getElementById('wrong1').value = '';
             document.getElementById('correct2').value = '';
             document.getElementById('wrong2').value = '';
-            
-            // Hide results
+            document.getElementById('calculatedMarks').value = '';
+            document.getElementById('expectedScore').value = '';
             document.getElementById('results').style.display = 'none';
-            
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        // Auto-calculate marks when answer details change
-        document.getElementById('correct1').addEventListener('input', updateMarksFromAnswers);
-        document.getElementById('wrong1').addEventListener('input', updateMarksFromAnswers);
-        document.getElementById('correct2').addEventListener('input', updateMarksFromAnswers);
-        document.getElementById('wrong2').addEventListener('input', updateMarksFromAnswers);
-        
-        function updateMarksFromAnswers() {
-            const correct1 = parseInt(document.getElementById('correct1').value) || 0;
-            const wrong1 = parseInt(document.getElementById('wrong1').value) || 0;
-            const correct2 = parseInt(document.getElementById('correct2').value) || 0;
-            const wrong2 = parseInt(document.getElementById('wrong2').value) || 0;
+
+        // Standalone functions for other tabs
+        function predictColleges() {
+            const score = parseFloat(document.getElementById('collegeScore').value) || 0;
+            const category = document.getElementById('collegeCategory').value;
+            const paper = 'CS'; // Default to CS for college prediction
             
-            if (correct1 > 0 || wrong1 > 0 || correct2 > 0 || wrong2 > 0) {
-                const marks = calculateMarks(correct1, wrong1, correct2, wrong2);
-                document.getElementById('marksInput').value = marks.toFixed(2);
-                
-                // Also update score
-                const score = marksToScore(marks);
-                document.getElementById('scoreInput').value = score.toFixed(2);
+            if (score === 0) {
+                alert('Please enter your expected GATE score');
+                return;
             }
+            
+            const colleges = predictCollegeAdmission(score, paper, category);
+            
+            // Display only college results
+            document.getElementById('collegePrediction').style.display = 'block';
+            document.getElementById('psuPrediction').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
         }
-        
-        // Pre-fill with sample data
+
+        function predictPSUJobs() {
+            const score = parseFloat(document.getElementById('psuScore').value) || 0;
+            const category = document.getElementById('psuCategory').value;
+            const paper = document.getElementById('psuBranch').value;
+            
+            if (score === 0) {
+                alert('Please enter your GATE score');
+                return;
+            }
+            
+            const psus = predictPSUOpportunities(score, paper, category);
+            
+            // Display only PSU results
+            document.getElementById('collegePrediction').style.display = 'none';
+            document.getElementById('psuPrediction').style.display = 'block';
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize
         window.onload = function() {
-            document.getElementById('marksInput').value = '75.5';
-            document.getElementById('scoreInput').value = '820';
+            updateCompetition();
             document.getElementById('correct1').value = '18';
             document.getElementById('wrong1').value = '4';
             document.getElementById('correct2').value = '22';
             document.getElementById('wrong2').value = '6';
+            calculateMarks();
         }
     </script>
 </body>
