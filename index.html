@@ -21,6 +21,7 @@
             --light: #ecf0f1;
             --success: #27ae60;
             --warning: #f39c12;
+            --danger: #e74c3c;
         }
 
         body {
@@ -85,7 +86,7 @@
             padding: 40px;
         }
 
-        /* Input Section - Collapsed by default */
+        /* Input Section */
         .input-section {
             background: #f8f9fa;
             border-radius: 15px;
@@ -177,7 +178,7 @@
             font-size: 0.95rem;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 8px;
@@ -185,7 +186,7 @@
             transition: all 0.3s;
         }
 
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             border-color: var(--secondary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
@@ -249,7 +250,30 @@
             transform: translateY(-1px);
         }
 
-        /* Results Section - Hidden initially */
+        /* Check Again Button */
+        .check-again-btn {
+            background: linear-gradient(135deg, var(--warning), #e67e22);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 15px rgba(243, 156, 18, 0.3);
+            margin-top: 20px;
+        }
+
+        .check-again-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(243, 156, 18, 0.4);
+        }
+
+        /* Results Section */
         .results-section {
             background: white;
             border-radius: 15px;
@@ -286,6 +310,47 @@
             color: var(--primary);
             font-size: 1.8rem;
             margin-bottom: 10px;
+        }
+
+        /* Qualification Status */
+        .qualification-status {
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .qualified {
+            background: linear-gradient(135deg, rgba(39, 174, 96, 0.15), rgba(39, 174, 96, 0.05));
+            border: 3px solid var(--success);
+        }
+
+        .not-qualified {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(231, 76, 60, 0.05));
+            border: 3px solid var(--danger);
+        }
+
+        .status-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .status-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .status-details {
+            font-size: 1.1rem;
+            color: #555;
         }
 
         .results-grid {
@@ -334,6 +399,81 @@
         .card-label {
             color: #666;
             font-size: 0.95rem;
+        }
+
+        /* Cutoff Section */
+        .cutoff-section {
+            background: linear-gradient(135deg, #e8f4fc, #d6eaf8);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .cutoff-section h4 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .cutoff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cutoff-table th {
+            background: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .cutoff-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cutoff-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .cutoff-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .your-cutoff {
+            background: rgba(52, 152, 219, 0.1);
+            font-weight: 700;
+        }
+
+        .cutoff-diff {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .cutoff-pass {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success);
+        }
+
+        .cutoff-fail {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--danger);
         }
 
         .marks-summary {
@@ -439,11 +579,11 @@
 
         /* Analysis Box */
         .analysis-box {
-            background: linear-gradient(135deg, #e8f4fc, #d6eaf8);
+            background: linear-gradient(135deg, #fff8e1, #ffeaa7);
             padding: 25px;
             border-radius: 12px;
             margin-top: 30px;
-            border-left: 5px solid var(--secondary);
+            border-left: 5px solid var(--warning);
         }
 
         .analysis-box h4 {
@@ -471,12 +611,12 @@
         }
 
         .average {
-            color: #f39c12;
+            color: var(--warning);
             font-weight: 700;
         }
 
         .improve {
-            color: var(--accent);
+            color: var(--danger);
             font-weight: 700;
         }
 
@@ -491,7 +631,7 @@
                 padding: 20px;
             }
 
-            .predict-btn {
+            .predict-btn, .check-again-btn {
                 padding: 15px 30px;
                 font-size: 1.1rem;
             }
@@ -503,21 +643,14 @@
             header {
                 padding: 20px;
             }
-        }
 
-        .category-select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            margin-top: 10px;
-            background: white;
-        }
+            .cutoff-table {
+                font-size: 0.9rem;
+            }
 
-        .category-select:focus {
-            border-color: var(--secondary);
-            outline: none;
+            .cutoff-table th, .cutoff-table td {
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -529,21 +662,35 @@
                 <i class="fas fa-graduation-cap"></i>
                 <div>
                     <h1>GATE <span>Predictor</span> 2026</h1>
-                    <p class="subtitle">Enter your marks → Click Predict → See your rank & score</p>
+                    <p class="subtitle">Enter your marks → Click Predict → See your rank, score & qualification</p>
                 </div>
             </div>
         </header>
 
         <!-- Main Content -->
         <div class="main-content">
-            <!-- Input Section - Collapsed initially -->
+            <!-- Input Section -->
             <div class="input-section expanded" id="inputSection">
                 <div class="section-toggle" onclick="toggleInputSection()">
-                    <h2><i class="fas fa-edit"></i> Enter Your GATE Marks</h2>
+                    <h2><i class="fas fa-edit"></i> Enter Your GATE Details</h2>
                     <span class="toggle-icon"><i class="fas fa-chevron-down"></i></span>
                 </div>
                 
                 <div class="input-fields" id="inputFields">
+                    <div class="input-group">
+                        <label><i class="fas fa-file-alt"></i> Select Your Paper</label>
+                        <select id="paper">
+                            <option value="CE">Civil Engineering (CE)</option>
+                            <option value="ME">Mechanical Engineering (ME)</option>
+                            <option value="EE">Electrical Engineering (EE)</option>
+                            <option value="EC">Electronics & Communication (EC)</option>
+                            <option value="CS" selected>Computer Science (CS)</option>
+                            <option value="DA">Data Science & AI (DA)</option>
+                            <option value="IN">Instrumentation Engineering (IN)</option>
+                            <option value="CH">Chemical Engineering (CH)</option>
+                        </select>
+                    </div>
+
                     <div class="marks-type">
                         <h4><i class="fas fa-1"></i> Type 1 Questions (1 Mark Each)</h4>
                         <div class="marks-grid">
@@ -594,7 +741,7 @@
 
                     <div class="input-group">
                         <label><i class="fas fa-users"></i> Your Category</label>
-                        <select id="category" class="category-select">
+                        <select id="category">
                             <option value="GEN" selected>General</option>
                             <option value="OBC">OBC-NCL</option>
                             <option value="EWS">EWS</option>
@@ -605,7 +752,7 @@
                     </div>
 
                     <div class="note-box" style="background: #fff8e1; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem;">
-                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> Type 1 has ⅓ negative marking, Type 2 has ⅔ negative marking.</p>
+                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> GATE 2026 cutoffs expected to increase by 1.5 marks. Type 1 has ⅓ negative marking, Type 2 has ⅔ negative marking.</p>
                     </div>
                 </div>
             </div>
@@ -613,21 +760,26 @@
             <!-- Predict Button -->
             <div class="predict-container">
                 <button class="predict-btn" onclick="predictRank()">
-                    <i class="fas fa-bolt"></i> PREDICT MY RANK & SCORE
+                    <i class="fas fa-bolt"></i> PREDICT MY RANK & QUALIFICATION
                 </button>
             </div>
 
             <!-- Loading Animation -->
             <div class="loading" id="loading">
                 <i class="fas fa-spinner"></i>
-                <p>Analyzing your marks and predicting rank...</p>
+                <p>Analyzing your marks and checking qualification...</p>
             </div>
 
-            <!-- Results Section - Initially Hidden -->
+            <!-- Results Section -->
             <div class="results-section" id="resultsSection">
                 <div class="results-header">
                     <h2><i class="fas fa-chart-line"></i> Your Prediction Results</h2>
-                    <p>Based on GATE 2025 actual data patterns</p>
+                    <p>Based on GATE 2025 actual data with 2026 expected cutoffs</p>
+                </div>
+
+                <!-- Qualification Status -->
+                <div class="qualification-status" id="qualificationStatus">
+                    <!-- Will be populated by JavaScript -->
                 </div>
 
                 <!-- Marks Summary -->
@@ -676,6 +828,14 @@
                     </div>
                 </div>
 
+                <!-- Cutoff Section -->
+                <div class="cutoff-section">
+                    <h4><i class="fas fa-flag-checkered"></i> GATE 2026 Expected Cutoff Marks</h4>
+                    <div id="cutoffTableContainer">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
                 <!-- Analysis Box -->
                 <div class="analysis-box">
                     <h4><i class="fas fa-lightbulb"></i> Analysis & Insights</h4>
@@ -694,6 +854,13 @@
                         <canvas id="rankChart"></canvas>
                     </div>
                 </div>
+
+                <!-- Check Again Button -->
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="check-again-btn" onclick="checkAgain()">
+                        <i class="fas fa-redo"></i> CHECK AGAIN WITH DIFFERENT MARKS
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -701,9 +868,9 @@
         <footer>
             <div class="footer-content">
                 <h3>GATE Rank Predictor 2026</h3>
-                <p>Using actual GATE 2025 data for accurate predictions</p>
+                <p>Using actual GATE 2025 data with 2026 expected cutoffs (+1.5 marks)</p>
                 <div class="copyright">
-                    <p>&copy; 2025 GATE Rank Predictor. Based on actual GATE 2025 data from official sources.</p>
+                    <p>&copy; 2025 GATE Rank Predictor. Cutoffs based on GATE 2025 official data.</p>
                 </div>
             </div>
         </footer>
@@ -755,6 +922,20 @@
             { rank: 23003, score: 343, marks: 28.56 }
         ];
 
+        // GATE 2025 Cutoffs with 2026 projections (+1.5 marks)
+        const gateCutoffs = {
+            "CE": { GEN: 29.2, OBC: 26.2, EWS: 26.2, SC: 19.4, ST: 19.4, PWD: 19.4 },
+            "ME": { GEN: 35.8, OBC: 32.2, EWS: 32.2, SC: 23.8, ST: 23.8, PWD: 23.8 },
+            "EE": { GEN: 25.0, OBC: 22.5, EWS: 22.5, SC: 16.6, ST: 16.6, PWD: 16.6 },
+            "EC": { GEN: 25.0, OBC: 22.5, EWS: 22.5, SC: 16.6, ST: 16.6, PWD: 16.6 },
+            "CS": { GEN: 29.2, OBC: 26.2, EWS: 26.2, SC: 19.4, ST: 19.4, PWD: 19.4 },
+            "DA": { GEN: 29.0, OBC: 23.0, EWS: 23.0, SC: 17.0, ST: 17.0, PWD: 17.0 },
+            "IN": { GEN: 25.6, OBC: 31.8, EWS: 31.8, SC: 23.5, ST: 23.5, PWD: 23.5 },
+            "CH": { GEN: 27.7, OBC: 24.9, EWS: 24.9, SC: 18.4, ST: 18.4, PWD: 18.4 }
+        };
+
+        const cutoffIncrease2026 = 1.5; // Expected increase in 2026
+
         let rankChart = null;
         let isInputExpanded = true;
 
@@ -768,7 +949,6 @@
         // Set value helper
         function setValue(elementId, value) {
             document.getElementById(elementId).value = value;
-            // Update active button state
             const buttons = document.querySelectorAll(`[onclick*="${elementId}"]`);
             buttons.forEach(btn => {
                 btn.classList.remove('active');
@@ -823,7 +1003,7 @@
                 }
             }
             
-            return 25000; // Default if something goes wrong
+            return 25000;
         }
 
         // Calculate GATE score
@@ -849,7 +1029,7 @@
                 }
             }
             
-            return 300; // Default if something goes wrong
+            return 300;
         }
 
         // Calculate percentile
@@ -859,48 +1039,158 @@
             return Math.min(99.99, Math.max(0.01, percentile.toFixed(2)));
         }
 
+        // Get cutoff for selected paper and category
+        function getCutoff(paper, category) {
+            const cutoffData = gateCutoffs[paper];
+            if (!cutoffData) return gateCutoffs["CS"][category] + cutoffIncrease2026;
+            return cutoffData[category] + cutoffIncrease2026;
+        }
+
+        // Create cutoff table
+        function createCutoffTable(paper, userMarks, userCategory) {
+            const cutoffData = gateCutoffs[paper] || gateCutoffs["CS"];
+            const paperNames = {
+                "CE": "Civil Engineering",
+                "ME": "Mechanical Engineering",
+                "EE": "Electrical Engineering",
+                "EC": "Electronics & Communication",
+                "CS": "Computer Science",
+                "DA": "Data Science & AI",
+                "IN": "Instrumentation Engineering",
+                "CH": "Chemical Engineering"
+            };
+            
+            const categoryMap = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" };
+            
+            let html = `
+                <p><strong>Paper:</strong> ${paperNames[paper]} | <strong>Your Category:</strong> ${categoryMap[userCategory]}</p>
+                <table class="cutoff-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>2025 Cutoff</th>
+                            <th>2026 Expected</th>
+                            <th>Your Marks</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            Object.entries(categoryMap).forEach(([code, name]) => {
+                const cutoff2025 = cutoffData[code];
+                const cutoff2026 = cutoff2025 + cutoffIncrease2026;
+                const isUserCategory = code === userCategory;
+                const passes = userMarks >= cutoff2026;
+                
+                html += `
+                    <tr ${isUserCategory ? 'class="your-cutoff"' : ''}>
+                        <td><strong>${name}</strong>${isUserCategory ? ' (You)' : ''}</td>
+                        <td class="cutoff-value">${cutoff2025.toFixed(1)}</td>
+                        <td class="cutoff-value">${cutoff2026.toFixed(1)} <span class="cutoff-diff cutoff-pass">+1.5</span></td>
+                        <td class="cutoff-value">${isUserCategory ? userMarks.toFixed(1) : '-'}</td>
+                        <td>
+                `;
+                
+                if (isUserCategory) {
+                    if (passes) {
+                        html += `<span class="cutoff-diff cutoff-pass"><i class="fas fa-check"></i> PASS</span>`;
+                    } else {
+                        html += `<span class="cutoff-diff cutoff-fail"><i class="fas fa-times"></i> FAIL</span>`;
+                    }
+                } else {
+                    html += `-`;
+                }
+                
+                html += `</td></tr>`;
+            });
+            
+            html += `</tbody></table>`;
+            return html;
+        }
+
+        // Get qualification status
+        function getQualificationStatus(qualified, userMarks, requiredCutoff, paper, category) {
+            const categoryNames = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" };
+            const paperNames = {
+                "CE": "Civil Engineering", "ME": "Mechanical", "EE": "Electrical",
+                "EC": "Electronics", "CS": "Computer Science", "DA": "Data Science",
+                "IN": "Instrumentation", "CH": "Chemical"
+            };
+            
+            const statusDiv = document.getElementById('qualificationStatus');
+            
+            if (qualified) {
+                statusDiv.className = 'qualification-status qualified';
+                statusDiv.innerHTML = `
+                    <div class="status-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="status-title" style="color: var(--success);">QUALIFIED! 🎉</div>
+                    <div class="status-details">
+                        <p>Congratulations! You have cleared the GATE 2026 expected cutoff for ${paperNames[paper]} (${categoryNames[category]}).</p>
+                        <p><strong>Your Marks:</strong> ${userMarks.toFixed(1)} | <strong>Required Cutoff:</strong> ${requiredCutoff.toFixed(1)}</p>
+                        <p>You are <strong>${(userMarks - requiredCutoff).toFixed(1)} marks above</strong> the expected cutoff.</p>
+                    </div>
+                `;
+            } else {
+                statusDiv.className = 'qualification-status not-qualified';
+                statusDiv.innerHTML = `
+                    <div class="status-icon"><i class="fas fa-times-circle"></i></div>
+                    <div class="status-title" style="color: var(--danger);">NOT QUALIFIED 😔</div>
+                    <div class="status-details">
+                        <p>You need to improve your score to clear the GATE 2026 expected cutoff for ${paperNames[paper]} (${categoryNames[category]}).</p>
+                        <p><strong>Your Marks:</strong> ${userMarks.toFixed(1)} | <strong>Required Cutoff:</strong> ${requiredCutoff.toFixed(1)}</p>
+                        <p>You need <strong>${(requiredCutoff - userMarks).toFixed(1)} more marks</strong> to qualify.</p>
+                    </div>
+                `;
+            }
+        }
+
         // Get analysis text
-        function getAnalysisText(rank, marks, score) {
-            const category = document.getElementById('category').value;
-            const categoryName = {
-                'GEN': 'General',
-                'OBC': 'OBC-NCL',
-                'EWS': 'EWS',
-                'SC': 'SC',
-                'ST': 'ST',
-                'PWD': 'PwD'
-            }[category];
+        function getAnalysisText(rank, marks, score, qualified, paper, category) {
+            const categoryName = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" }[category];
             
             let analysis = '';
             
-            if (rank <= 100) {
-                analysis = `<span class="excellent">Excellent! With rank ${rank.toLocaleString()} in ${categoryName} category, you have excellent chances for top IITs like IIT Bombay, Delhi, Madras.</span>`;
-            } else if (rank <= 500) {
-                analysis = `<span class="good">Great! Rank ${rank.toLocaleString()} is very competitive. You have good chances for all IITs and excellent chances for top NITs.</span>`;
-            } else if (rank <= 1000) {
-                analysis = `<span class="good">Good performance! Rank ${rank.toLocaleString()} gives you good chances for IITs and excellent chances for NITs and IIITs.</span>`;
-            } else if (rank <= 3000) {
-                analysis = `<span class="average">Good score! With rank ${rank.toLocaleString()}, you have good chances for NITs, IIITs, and other good universities.</span>`;
-            } else if (rank <= 10000) {
-                analysis = `<span class="average">Average score. Rank ${rank.toLocaleString()} may get you admission in good universities and colleges.</span>`;
+            if (qualified) {
+                if (rank <= 100) {
+                    analysis = `<span class="excellent">Excellent! With rank ${rank.toLocaleString()} in ${categoryName} category, you have excellent chances for top IITs and IISc.</span>`;
+                } else if (rank <= 500) {
+                    analysis = `<span class="good">Great! Rank ${rank.toLocaleString()} is very competitive. You have good chances for all IITs and excellent chances for top NITs.</span>`;
+                } else if (rank <= 1000) {
+                    analysis = `<span class="good">Good performance! Rank ${rank.toLocaleString()} gives you good chances for IITs and excellent chances for NITs and IIITs.</span>`;
+                } else if (rank <= 3000) {
+                    analysis = `<span class="average">Good score! With rank ${rank.toLocaleString()}, you have good chances for NITs, IIITs, and other good universities.</span>`;
+                } else {
+                    analysis = `<span class="average">You have qualified! Rank ${rank.toLocaleString()} gives you opportunities in various universities and colleges.</span>`;
+                }
             } else {
-                analysis = `<span class="improve">Keep improving. Consider reappearing for better opportunities or explore other options.</span>`;
+                analysis = `<span class="improve">You need to improve your score to qualify. Consider focusing on weak areas and practice more.</span>`;
             }
             
-            analysis += `<br><br><strong>With ${marks.toFixed(2)} marks and GATE score ${score}:</strong><br>`;
+            analysis += `<br><br><strong>Based on ${marks.toFixed(2)} marks and GATE score ${score}:</strong><br>`;
             
-            if (rank <= 1000) {
-                analysis += "• High probability for IIT M.Tech admissions<br>";
-                analysis += "• Good chances for PSU recruitment through GATE<br>";
-                analysis += "• Eligible for PhD programs in top institutes";
-            } else if (rank <= 5000) {
-                analysis += "• Good chances for NITs and IIITs<br>";
-                analysis += "• Eligible for most PSUs through GATE<br>";
-                analysis += "• Good opportunities for higher studies";
+            if (qualified) {
+                if (rank <= 1000) {
+                    analysis += "✅ High probability for IIT M.Tech admissions<br>";
+                    analysis += "✅ Good chances for PSU recruitment through GATE<br>";
+                    analysis += "✅ Eligible for PhD programs in top institutes<br>";
+                    analysis += "✅ Can apply for research fellowships";
+                } else if (rank <= 5000) {
+                    analysis += "✅ Good chances for NITs and IIITs<br>";
+                    analysis += "✅ Eligible for most PSUs through GATE<br>";
+                    analysis += "✅ Good opportunities for higher studies<br>";
+                    analysis += "✅ Can apply for junior research fellow positions";
+                } else {
+                    analysis += "✅ Eligible for admission in many universities<br>";
+                    analysis += "✅ Some PSUs may accept this rank<br>";
+                    analysis += "✅ Good foundation for further improvement<br>";
+                    analysis += "✅ Can apply for assistant professor positions";
+                }
             } else {
-                analysis += "• Consider state universities and private colleges<br>";
-                analysis += "• Some PSUs may have cutoff around this rank<br>";
-                analysis += "• Good foundation for improvement next year";
+                analysis += "❌ Need to clear cutoff first<br>";
+                analysis += "📚 Focus on improving weak areas<br>";
+                analysis += "⏱️ Practice time management<br>";
+                analysis += "📈 Aim for at least ${(requiredCutoff + 5).toFixed(1)} marks to be safe";
             }
             
             return analysis;
@@ -972,6 +1262,19 @@
             });
         }
 
+        // Check again function
+        function checkAgain() {
+            document.getElementById('resultsSection').classList.remove('visible');
+            document.getElementById('loading').style.display = 'none';
+            
+            // Reset input section to expanded
+            isInputExpanded = true;
+            document.getElementById('inputSection').classList.add('expanded');
+            
+            // Scroll to input section
+            document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
         // Main prediction function
         function predictRank() {
             // Show loading
@@ -979,20 +1282,29 @@
             document.getElementById('resultsSection').classList.remove('visible');
             
             setTimeout(() => {
+                // Get user inputs
+                const paper = document.getElementById('paper').value;
+                const category = document.getElementById('category').value;
+                
                 // Calculate marks
                 const marksData = calculateMarks();
+                const userMarks = marksData.totalMarks;
                 
                 // Calculate predictions
-                const predictedRank = calculateRankFromMarks(marksData.totalMarks);
-                const predictedScore = calculateScoreFromMarks(marksData.totalMarks);
+                const predictedRank = calculateRankFromMarks(userMarks);
+                const predictedScore = calculateScoreFromMarks(userMarks);
                 const percentile = calculatePercentile(predictedRank);
                 const rankLower = Math.max(1, Math.round(predictedRank * 0.85));
                 const rankUpper = Math.round(predictedRank * 1.15);
                 
+                // Check qualification
+                const requiredCutoff = getCutoff(paper, category);
+                const qualified = userMarks >= requiredCutoff;
+                
                 // Update marks summary
                 document.getElementById('type1Marks').textContent = marksData.type1Marks.toFixed(2);
                 document.getElementById('type2Marks').textContent = marksData.type2Marks.toFixed(2);
-                document.getElementById('totalMarks').textContent = marksData.totalMarks.toFixed(2);
+                document.getElementById('totalMarks').textContent = userMarks.toFixed(2);
                 document.getElementById('type1Details').textContent = `${marksData.type1Correct}✓ ${marksData.type1Wrong}✗`;
                 document.getElementById('type2Details').textContent = `${marksData.type2Correct}✓ ${marksData.type2Wrong}✗`;
                 
@@ -1002,11 +1314,17 @@
                 document.getElementById('percentile').textContent = percentile + '%';
                 document.getElementById('rankRange').textContent = `${rankLower.toLocaleString()} - ${rankUpper.toLocaleString()}`;
                 
+                // Update qualification status
+                getQualificationStatus(qualified, userMarks, requiredCutoff, paper, category);
+                
+                // Update cutoff table
+                document.getElementById('cutoffTableContainer').innerHTML = createCutoffTable(paper, userMarks, category);
+                
                 // Update analysis
-                document.getElementById('analysisText').innerHTML = getAnalysisText(predictedRank, marksData.totalMarks, predictedScore);
+                document.getElementById('analysisText').innerHTML = getAnalysisText(predictedRank, userMarks, predictedScore, qualified, paper, category);
                 
                 // Update chart
-                updateChart(marksData.totalMarks, predictedRank);
+                updateChart(userMarks, predictedRank);
                 
                 // Hide loading and show results
                 document.getElementById('loading').style.display = 'none';
@@ -1019,7 +1337,6 @@
 
         // Initialize quick buttons
         function initQuickButtons() {
-            // Set active states for default values
             setValue('type1Correct', 25);
             setValue('type1Wrong', 5);
             setValue('type2Correct', 18);
@@ -1029,6 +1346,8 @@
         // Initialize on load
         window.addEventListener('DOMContentLoaded', function() {
             initQuickButtons();
+            // Run prediction on load
+            setTimeout(predictRank, 1000);
         });
     </script>
 </body>
