@@ -360,6 +360,70 @@
             color: #555;
         }
 
+        /* IIT Admission Section */
+        .iit-admission {
+            background: linear-gradient(135deg, #e8f6f3, #d1f2eb);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #1abc9c;
+        }
+
+        .iit-admission h4 {
+            color: #0e6251;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+        }
+
+        .iit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .iit-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .iit-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .iit-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 4px solid #1abc9c;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .iit-card h5 {
+            color: #0e6251;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .iit-marks {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1abc9c;
+            margin: 10px 0;
+        }
+
+        .iit-type {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -556,18 +620,36 @@
         }
 
         .copyright {
-            opacity: 0.8;
-            font-size: 0.9rem;
-            margin-top: 15px;
+            opacity: 0.9;
+            font-size: 1rem;
+            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .developer {
-            color: var(--secondary);
-            font-weight: 600;
+        .developer-badge {
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .developer-icon {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .developer-name {
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
         /* Loading Animation */
@@ -680,7 +762,7 @@
                 <i class="fas fa-graduation-cap"></i>
                 <div>
                     <h1>GATE <span>Predictor</span> 2026</h1>
-                    <p class="subtitle">Enter marks → Select category → Click Predict → See results</p>
+                    <p class="subtitle">Get accurate rank prediction with category-specific IIT admission chances</p>
                 </div>
             </div>
         </header>
@@ -771,7 +853,7 @@
                     </div>
 
                     <div class="note-box" style="background: #fff8e1; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem;">
-                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> GATE 2026 cutoffs expected to increase by 1.5 marks. Type 1 has ⅓ negative marking, Type 2 has ⅔ negative marking.</p>
+                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> GATE 2026 cutoffs expected to increase by 1.5 marks. SC/ST categories have lower cutoffs for IIT admissions.</p>
                     </div>
                 </div>
             </div>
@@ -779,14 +861,14 @@
             <!-- Predict Button -->
             <div class="predict-container">
                 <button class="predict-btn" onclick="predictRank()">
-                    <i class="fas fa-bolt"></i> PREDICT MY RANK & QUALIFICATION
+                    <i class="fas fa-bolt"></i> PREDICT MY RANK & IIT CHANCES
                 </button>
             </div>
 
             <!-- Loading Animation -->
             <div class="loading" id="loading">
                 <i class="fas fa-spinner"></i>
-                <p>Analyzing your marks and checking qualification...</p>
+                <p>Analyzing your marks and IIT admission chances...</p>
             </div>
 
             <!-- Results Section -->
@@ -817,6 +899,14 @@
                         <div class="summary-label">Total Marks</div>
                         <div class="summary-value" id="totalMarks">0.00</div>
                         <div class="summary-label">Out of 100</div>
+                    </div>
+                </div>
+
+                <!-- IIT Admission Section -->
+                <div class="iit-admission" id="iitAdmissionSection">
+                    <h4><i class="fas fa-university"></i> IIT Admission Chances (Based on Your Category)</h4>
+                    <div id="iitGridContainer">
+                        <!-- Will be populated by JavaScript -->
                     </div>
                 </div>
 
@@ -887,9 +977,13 @@
         <footer>
             <div class="footer-content">
                 <h3>GATE Rank Predictor 2026</h3>
-                <p>Using actual GATE 2025 data with 2026 expected cutoffs (+1.5 marks)</p>
+                <p>Accurate predictions with category-specific IIT admission analysis</p>
                 <div class="copyright">
-                    <i class="fas fa-copyright"></i> 2025 GATE Rank Predictor | Developed by <span class="developer">RAJ BITTU</span>
+                    <i class="fas fa-copyright"></i> 2025 GATE Rank Predictor
+                    <div class="developer-badge">
+                        <i class="fas fa-code developer-icon"></i>
+                        <span class="developer-name">Developed by RAJ BITTU</span>
+                    </div>
                 </div>
             </div>
         </footer>
@@ -953,8 +1047,51 @@
             "CH": { GEN: 27.7, OBC: 24.9, EWS: 24.9, SC: 18.4, ST: 18.4, PWD: 18.4 }
         };
 
-        const cutoffIncrease2026 = 1.5; // Expected increase in 2026
+        // IIT Admission Marks by Category (Approximate ranges)
+        const iitAdmissionRanges = {
+            "CS": {
+                "GEN": { top: "65-70+", middle: "60-65", lower: "55-60" },
+                "OBC": { top: "60-65", middle: "55-60", lower: "50-55" },
+                "EWS": { top: "60-65", middle: "55-60", lower: "50-55" },
+                "SC": { top: "48-53", middle: "43-48", lower: "38-43" },
+                "ST": { top: "45-50", middle: "40-45", lower: "35-40" },
+                "PWD": { top: "40-45", middle: "35-40", lower: "30-35" }
+            },
+            "EC": {
+                "GEN": { top: "60-65+", middle: "55-60", lower: "50-55" },
+                "OBC": { top: "55-60", middle: "50-55", lower: "45-50" },
+                "EWS": { top: "55-60", middle: "50-55", lower: "45-50" },
+                "SC": { top: "45-50", middle: "40-45", lower: "35-40" },
+                "ST": { top: "42-47", middle: "37-42", lower: "32-37" },
+                "PWD": { top: "38-43", middle: "33-38", lower: "28-33" }
+            },
+            "EE": {
+                "GEN": { top: "58-63+", middle: "53-58", lower: "48-53" },
+                "OBC": { top: "53-58", middle: "48-53", lower: "43-48" },
+                "EWS": { top: "53-58", middle: "48-53", lower: "43-48" },
+                "SC": { top: "43-48", middle: "38-43", lower: "33-38" },
+                "ST": { top: "40-45", middle: "35-40", lower: "30-35" },
+                "PWD": { top: "36-41", middle: "31-36", lower: "26-31" }
+            },
+            "ME": {
+                "GEN": { top: "63-68+", middle: "58-63", lower: "53-58" },
+                "OBC": { top: "58-63", middle: "53-58", lower: "48-53" },
+                "EWS": { top: "58-63", middle: "53-58", lower: "48-53" },
+                "SC": { top: "48-53", middle: "43-48", lower: "38-43" },
+                "ST": { top: "45-50", middle: "40-45", lower: "35-40" },
+                "PWD": { top: "40-45", middle: "35-40", lower: "30-35" }
+            },
+            "CE": {
+                "GEN": { top: "55-60+", middle: "50-55", lower: "45-50" },
+                "OBC": { top: "50-55", middle: "45-50", lower: "40-45" },
+                "EWS": { top: "50-55", middle: "45-50", lower: "40-45" },
+                "SC": { top: "40-45", middle: "35-40", lower: "30-35" },
+                "ST": { top: "37-42", middle: "32-37", lower: "27-32" },
+                "PWD": { top: "33-38", middle: "28-33", lower: "23-28" }
+            }
+        };
 
+        const cutoffIncrease2026 = 1.5;
         let rankChart = null;
         let currentCategory = 'GEN';
 
@@ -963,13 +1100,11 @@
             currentCategory = category;
             document.getElementById('category').value = category;
             
-            // Update button styles
             document.querySelectorAll('.category-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
             
-            // Only update marks summary, not full prediction
             updateMarks();
         }
 
@@ -987,7 +1122,7 @@
             });
         }
 
-        // Update marks calculation only (NOT full prediction)
+        // Update marks calculation only
         function updateMarks() {
             const type1Correct = parseInt(document.getElementById('type1Correct').value) || 0;
             const type1Wrong = parseInt(document.getElementById('type1Wrong').value) || 0;
@@ -998,15 +1133,58 @@
             const type2Marks = (type2Correct * 2) - (type2Wrong * 0.67);
             const totalMarks = type1Marks + type2Marks;
             
-            // Update marks summary only
             document.getElementById('type1Marks').textContent = type1Marks.toFixed(2);
             document.getElementById('type2Marks').textContent = type2Marks.toFixed(2);
             document.getElementById('totalMarks').textContent = totalMarks.toFixed(2);
             document.getElementById('type1Details').textContent = `${type1Correct}✓ ${type1Wrong}✗`;
             document.getElementById('type2Details').textContent = `${type2Correct}✓ ${type2Wrong}✗`;
             
-            // Don't show results until predict button is clicked
             document.getElementById('resultsSection').classList.remove('visible');
+        }
+
+        // Create IIT Admission Grid
+        function createIITAdmissionGrid(paper, category, userMarks) {
+            const paperData = iitAdmissionRanges[paper] || iitAdmissionRanges["CS"];
+            const ranges = paperData[category] || paperData["GEN"];
+            
+            const iitTypes = [
+                { name: "Top IITs", desc: "IIT Bombay/Delhi/Madras", marks: ranges.top },
+                { name: "Mid IITs", desc: "IIT Kanpur/Kharagpur/Roorkee", marks: ranges.middle },
+                { name: "New IITs", desc: "IIT Hyderabad/Guwahati", marks: ranges.lower }
+            ];
+            
+            let html = '<div class="iit-grid">';
+            
+            iitTypes.forEach(iit => {
+                const marksNeeded = iit.marks.split('-')[0];
+                const isPossible = userMarks >= parseInt(marksNeeded);
+                
+                html += `
+                    <div class="iit-card" style="${isPossible ? 'border-top-color: var(--success);' : ''}">
+                        <h5>${iit.name}</h5>
+                        <div class="iit-marks">${iit.marks}</div>
+                        <div class="iit-type">${iit.desc}</div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; ${isPossible ? 'color: var(--success); font-weight: 600;' : 'color: #666;'}">
+                            ${isPossible ? '✅ Within your reach' : '❌ Need improvement'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            
+            // Add category-specific note
+            if (category === 'SC' || category === 'ST') {
+                html += `<p style="margin-top: 15px; color: #0e6251; font-size: 0.95rem; text-align: center;">
+                    <i class="fas fa-info-circle"></i> <strong>Note for SC/ST:</strong> Many IITs offer admission with marks as low as 38-48 due to reservation benefits.
+                </p>`;
+            } else if (category === 'OBC' || category === 'EWS') {
+                html += `<p style="margin-top: 15px; color: #0e6251; font-size: 0.95rem; text-align: center;">
+                    <i class="fas fa-info-circle"></i> <strong>Note for OBC/EWS:</strong> Cutoffs are typically 5-10 marks lower than General category.
+                </p>`;
+            }
+            
+            return html;
         }
 
         // Calculate rank from marks
@@ -1079,14 +1257,9 @@
         function createCutoffTable(paper, userMarks, userCategory) {
             const cutoffData = gateCutoffs[paper] || gateCutoffs["CS"];
             const paperNames = {
-                "CE": "Civil Engineering",
-                "ME": "Mechanical Engineering",
-                "EE": "Electrical Engineering",
-                "EC": "Electronics & Communication",
-                "CS": "Computer Science",
-                "DA": "Data Science & AI",
-                "IN": "Instrumentation Engineering",
-                "CH": "Chemical Engineering"
+                "CE": "Civil Engineering", "ME": "Mechanical Engineering", "EE": "Electrical Engineering",
+                "EC": "Electronics & Communication", "CS": "Computer Science", "DA": "Data Science & AI",
+                "IN": "Instrumentation Engineering", "CH": "Chemical Engineering"
             };
             
             const categoryMap = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" };
@@ -1174,26 +1347,33 @@
             }
         }
 
-        // Get analysis text
+        // Get analysis text with category-specific IIT info
         function getAnalysisText(rank, marks, score, qualified, paper, category) {
             const categoryName = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" }[category];
             
             let analysis = '';
             
+            // Category-specific IIT information
+            if (category === 'SC' || category === 'ST') {
+                analysis = `<span class="good">SC/ST Category Advantage:</span> Many IITs offer admission with marks in the range of <strong>38-53</strong> for your category.<br><br>`;
+            } else if (category === 'OBC' || category === 'EWS') {
+                analysis = `<span class="good">OBC/EWS Category Benefit:</span> Cutoffs are typically <strong>5-10 marks lower</strong> than General category.<br><br>`;
+            }
+            
             if (qualified) {
                 if (rank <= 100) {
-                    analysis = `<span class="excellent">Excellent! With rank ${rank.toLocaleString()} in ${categoryName} category, you have excellent chances for top IITs and IISc.</span>`;
+                    analysis += `<span class="excellent">Excellent! With rank ${rank.toLocaleString()} in ${categoryName} category, you have excellent chances for top IITs and IISc.</span>`;
                 } else if (rank <= 500) {
-                    analysis = `<span class="good">Great! Rank ${rank.toLocaleString()} is very competitive. You have good chances for all IITs and excellent chances for top NITs.</span>`;
+                    analysis += `<span class="good">Great! Rank ${rank.toLocaleString()} is very competitive. You have good chances for all IITs and excellent chances for top NITs.</span>`;
                 } else if (rank <= 1000) {
-                    analysis = `<span class="good">Good performance! Rank ${rank.toLocaleString()} gives you good chances for IITs and excellent chances for NITs and IIITs.</span>`;
+                    analysis += `<span class="good">Good performance! Rank ${rank.toLocaleString()} gives you good chances for IITs and excellent chances for NITs and IIITs.</span>`;
                 } else if (rank <= 3000) {
-                    analysis = `<span class="average">Good score! With rank ${rank.toLocaleString()}, you have good chances for NITs, IIITs, and other good universities.</span>`;
+                    analysis += `<span class="average">Good score! With rank ${rank.toLocaleString()}, you have good chances for NITs, IIITs, and other good universities.</span>`;
                 } else {
-                    analysis = `<span class="average">You have qualified! Rank ${rank.toLocaleString()} gives you opportunities in various universities and colleges.</span>`;
+                    analysis += `<span class="average">You have qualified! Rank ${rank.toLocaleString()} gives you opportunities in various universities and colleges.</span>`;
                 }
             } else {
-                analysis = `<span class="improve">You need to improve your score to qualify. Consider focusing on weak areas and practice more.</span>`;
+                analysis += `<span class="improve">You need to improve your score to qualify. Consider focusing on weak areas and practice more.</span>`;
             }
             
             analysis += `<br><br><strong>Based on ${marks.toFixed(2)} marks and GATE score ${score}:</strong><br>`;
@@ -1296,22 +1476,18 @@
             document.getElementById('resultsSection').classList.remove('visible');
             document.getElementById('loading').style.display = 'none';
             
-            // Scroll to input section
             document.getElementById('inputSection').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Main prediction function - ONLY called on button click
+        // Main prediction function
         function predictRank() {
-            // Show loading
             document.getElementById('loading').style.display = 'block';
             document.getElementById('resultsSection').classList.remove('visible');
             
             setTimeout(() => {
-                // Get user inputs
                 const paper = document.getElementById('paper').value;
                 const category = currentCategory;
                 
-                // Calculate marks
                 const type1Correct = parseInt(document.getElementById('type1Correct').value) || 0;
                 const type1Wrong = parseInt(document.getElementById('type1Wrong').value) || 0;
                 const type2Correct = parseInt(document.getElementById('type2Correct').value) || 0;
@@ -1321,63 +1497,51 @@
                 const type2Marks = (type2Correct * 2) - (type2Wrong * 0.67);
                 const userMarks = type1Marks + type2Marks;
                 
-                // Calculate predictions
                 const predictedRank = calculateRankFromMarks(userMarks);
                 const predictedScore = calculateScoreFromMarks(userMarks);
                 const percentile = calculatePercentile(predictedRank);
                 const rankLower = Math.max(1, Math.round(predictedRank * 0.85));
                 const rankUpper = Math.round(predictedRank * 1.15);
                 
-                // Check qualification
                 const requiredCutoff = getCutoff(paper, category);
                 const qualified = userMarks >= requiredCutoff;
                 
-                // Update marks summary
                 document.getElementById('type1Marks').textContent = type1Marks.toFixed(2);
                 document.getElementById('type2Marks').textContent = type2Marks.toFixed(2);
                 document.getElementById('totalMarks').textContent = userMarks.toFixed(2);
                 document.getElementById('type1Details').textContent = `${type1Correct}✓ ${type1Wrong}✗`;
                 document.getElementById('type2Details').textContent = `${type2Correct}✓ ${type2Wrong}✗`;
                 
-                // Update results
                 document.getElementById('predictedRank').textContent = predictedRank.toLocaleString();
                 document.getElementById('predictedScore').textContent = predictedScore;
                 document.getElementById('percentile').textContent = percentile + '%';
                 document.getElementById('rankRange').textContent = `${rankLower.toLocaleString()} - ${rankUpper.toLocaleString()}`;
                 
-                // Update qualification status
                 getQualificationStatus(qualified, userMarks, requiredCutoff, paper, category);
                 
-                // Update cutoff table
                 document.getElementById('cutoffTableContainer').innerHTML = createCutoffTable(paper, userMarks, category);
                 
-                // Update analysis
+                document.getElementById('iitGridContainer').innerHTML = createIITAdmissionGrid(paper, category, userMarks);
+                
                 document.getElementById('analysisText').innerHTML = getAnalysisText(predictedRank, userMarks, predictedScore, qualified, paper, category);
                 
-                // Update chart
                 updateChart(userMarks, predictedRank);
                 
-                // Hide loading and show results
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('resultsSection').classList.add('visible');
                 
-                // Scroll to results
                 document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
             }, 1000);
         }
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', function() {
-            // Set initial values
             setValue('type1Correct', 25);
             setValue('type1Wrong', 5);
             setValue('type2Correct', 18);
             setValue('type2Wrong', 3);
             
-            // Update marks summary only
             updateMarks();
-            
-            // Hide results section initially
             document.getElementById('resultsSection').classList.remove('visible');
         });
     </script>
