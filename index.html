@@ -276,12 +276,14 @@
             margin-top: 5px;
         }
         
-        /* Combined College & PSU Section */
+        /* Combined College & PSU Section - CHANGED TO WHITE BACKGROUND */
         .opportunities-section {
-            background: rgba(255,255,255,0.15);
+            background: white;
             padding: 25px;
             border-radius: 10px;
             margin-top: 30px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
         
         .opportunity-grid {
@@ -295,6 +297,7 @@
             text-align: center;
             margin-bottom: 20px;
             font-size: 1.4rem;
+            color: #1a237e;
         }
         
         .college-list, .psu-list {
@@ -302,25 +305,30 @@
         }
         
         .college-item, .psu-item {
-            background: rgba(255,255,255,0.1);
+            background: #f8f9fa;
             padding: 15px;
             margin-bottom: 12px;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border: 1px solid #e9ecef;
         }
         
         .college-name, .psu-name {
             font-weight: 600;
             font-size: 1rem;
+            color: #333;
         }
         
         .college-score, .psu-cutoff {
             font-size: 0.9rem;
-            background: rgba(255,255,255,0.2);
+            background: white;
             padding: 4px 12px;
             border-radius: 15px;
+            border: 1px solid #ddd;
+            color: #333;
+            font-weight: bold;
         }
         
         .chance-indicator {
@@ -329,21 +337,25 @@
             border-radius: 12px;
             margin-top: 5px;
             display: inline-block;
+            font-weight: 600;
         }
         
         .high-chance {
-            background: rgba(76, 175, 80, 0.3);
+            background: #e8f5e9;
             color: #4CAF50;
+            border: 1px solid #c8e6c9;
         }
         
         .medium-chance {
-            background: rgba(255, 152, 0, 0.3);
+            background: #fff3e0;
             color: #FF9800;
+            border: 1px solid #ffe0b2;
         }
         
         .low-chance {
-            background: rgba(244, 67, 54, 0.3);
+            background: #ffebee;
             color: #F44336;
+            border: 1px solid #ffcdd2;
         }
         
         .opportunity-status {
@@ -351,16 +363,17 @@
             margin: 20px 0;
             font-size: 1.2rem;
             font-weight: bold;
+            color: #333;
         }
         
-        /* IIT/NIT Cutoff Section */
+        /* IIT/NIT Cutoff Section - CHANGED TO BLACK BACKGROUND */
         .cutoff-section {
             margin-top: 40px;
-            background: white;
+            background: black;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            border: 1px solid #333;
         }
         
         .cutoff-header {
@@ -372,8 +385,8 @@
         
         .cutoff-tabs {
             display: flex;
-            background: #f5f5f5;
-            border-bottom: 1px solid #ddd;
+            background: #222;
+            border-bottom: 1px solid #444;
             flex-wrap: wrap;
         }
         
@@ -386,10 +399,11 @@
             transition: all 0.3s;
             border-bottom: 3px solid transparent;
             min-width: 200px;
+            color: #ddd;
         }
         
         .cutoff-tab.active {
-            background: white;
+            background: #333;
             border-bottom: 3px solid #667eea;
             color: #667eea;
         }
@@ -398,6 +412,8 @@
             padding: 20px;
             display: none;
             overflow-x: auto;
+            background: black;
+            color: white;
         }
         
         .cutoff-content.active {
@@ -409,6 +425,7 @@
             border-collapse: collapse;
             margin-top: 20px;
             min-width: 800px;
+            background: #111;
         }
         
         .cutoff-table th {
@@ -420,21 +437,23 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            border: 1px solid #333;
         }
         
         .cutoff-table td {
             padding: 12px;
             text-align: center;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #333;
             vertical-align: middle;
+            color: #ddd;
         }
         
         .cutoff-table tr:nth-child(even) {
-            background-color: #f8f9fa;
+            background-color: #222;
         }
         
         .cutoff-table tr:hover {
-            background-color: #f0f0f0;
+            background-color: #333;
         }
         
         .score-badge {
@@ -446,7 +465,7 @@
             min-width: 70px;
             text-align: center;
             color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
         
         .score-high {
@@ -499,18 +518,19 @@
         }
         
         .cutoff-card {
-            background: white;
+            background: #222;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            color: white;
         }
         
         .cutoff-card h3 {
-            color: #1a237e;
+            color: #667eea;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #444;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -527,12 +547,12 @@
             justify-content: space-between;
             align-items: center;
             padding: 8px 0;
-            border-bottom: 1px solid #f5f5f5;
+            border-bottom: 1px solid #333;
         }
         
         .cutoff-category {
             font-weight: 600;
-            color: #333;
+            color: #ddd;
         }
         
         .cutoff-score {
@@ -613,7 +633,7 @@
         }
         
         .highlight-row {
-            background-color: #e8f5e9 !important;
+            background-color: #333344 !important;
             font-weight: bold;
         }
         
@@ -631,6 +651,13 @@
         
         .auto-calc-btn:hover {
             background: #5a67d8;
+        }
+        
+        /* College list item additional info */
+        .college-info, .psu-info {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 3px;
         }
         
         @media (max-width: 768px) {
@@ -718,9 +745,7 @@
                             </select>
                         </div>
                         
-                        <button class="auto-calc-btn" onclick="fillSampleData()">
-                            📊 Fill Sample Data (CS Paper)
-                        </button>
+                        <!-- REMOVED: Fill Sample Data Button -->
                     </div>
                     
                     <div class="input-section">
@@ -766,9 +791,7 @@
                             <input type="number" id="expectedScore" readonly style="background: #e9ecef; font-weight: bold;">
                         </div>
                         
-                        <button class="auto-calc-btn" onclick="calculateMarks()">
-                            🔄 Calculate Marks Now
-                        </button>
+                        <!-- REMOVED: Calculate Marks Now Button -->
                     </div>
                 </div>
                 
@@ -858,7 +881,7 @@
                             <ul class="college-list" id="collegeList">
                                 <!-- College list will be populated here -->
                             </ul>
-                            <div id="collegeSummary" style="text-align: center; margin-top: 15px; font-size: 0.9rem; opacity: 0.8;"></div>
+                            <div id="collegeSummary" style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #666;"></div>
                         </div>
                         
                         <!-- PSU Job Opportunities -->
@@ -867,7 +890,7 @@
                             <ul class="psu-list" id="psuList">
                                 <!-- PSU list will be populated here -->
                             </ul>
-                            <div id="psuSummary" style="text-align: center; margin-top: 15px; font-size: 0.9rem; opacity: 0.8;"></div>
+                            <div id="psuSummary" style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #666;"></div>
                         </div>
                     </div>
                 </div>
@@ -1205,17 +1228,6 @@
         let userScore = 0;
         let userCategory = 'GEN';
 
-        // Fill sample data for testing
-        function fillSampleData() {
-            document.getElementById('correct1').value = '18';
-            document.getElementById('wrong1').value = '4';
-            document.getElementById('correct2').value = '22';
-            document.getElementById('wrong2').value = '6';
-            document.getElementById('paperCode').value = 'CS';
-            updateCompetition();
-            calculateMarks();
-        }
-
         // Calculate marks and score
         function calculateMarks() {
             const correct1 = parseInt(document.getElementById('correct1').value) || 0;
@@ -1261,7 +1273,7 @@
             userScore = result.score;
             
             if (marks === 0) {
-                alert('Please enter your answer details first. Click "Fill Sample Data" for a quick test.');
+                alert('Please enter your answer details first.');
                 return;
             }
             
@@ -1519,7 +1531,7 @@
                     li.innerHTML = `
                         <div>
                             <div class="college-name">${college.name}</div>
-                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                            <div class="college-info">
                                 ${college.location} • ${college.tier}
                             </div>
                             <span class="chance-indicator ${chanceClass}">
@@ -1554,7 +1566,7 @@
                     li.innerHTML = `
                         <div>
                             <div class="psu-name">${psu.name}</div>
-                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                            <div class="psu-info">
                                 ${psu.category} • Package: ${psu.package}
                             </div>
                             <span class="chance-indicator ${chanceClass}">
@@ -1883,7 +1895,12 @@
         // Initialize
         window.onload = function() {
             updateCompetition();
-            fillSampleData(); // Auto-fill sample data for testing
+            // Auto-fill sample data for demonstration
+            document.getElementById('correct1').value = '18';
+            document.getElementById('wrong1').value = '4';
+            document.getElementById('correct2').value = '22';
+            document.getElementById('wrong2').value = '6';
+            calculateMarks();
         }
     </script>
 </body>
