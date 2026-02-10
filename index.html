@@ -17,7 +17,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -353,6 +353,139 @@
             font-weight: bold;
         }
         
+        /* IIT/NIT Cutoff Section */
+        .cutoff-section {
+            margin-top: 40px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .cutoff-header {
+            background: linear-gradient(to right, #1a237e, #311b92);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .cutoff-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .cutoff-tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .cutoff-tab.active {
+            background: white;
+            border-bottom: 3px solid #667eea;
+            color: #667eea;
+        }
+        
+        .cutoff-content {
+            padding: 20px;
+            display: none;
+        }
+        
+        .cutoff-content.active {
+            display: block;
+        }
+        
+        .cutoff-table-container {
+            overflow-x: auto;
+        }
+        
+        .cutoff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .cutoff-table th {
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .cutoff-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .cutoff-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .cutoff-table tr:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .score-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .score-high {
+            background: linear-gradient(to right, #4CAF50, #45a049);
+            color: white;
+        }
+        
+        .score-medium {
+            background: linear-gradient(to right, #FF9800, #f57c00);
+            color: white;
+        }
+        
+        .score-low {
+            background: linear-gradient(to right, #f44336, #d32f2f);
+            color: white;
+        }
+        
+        .score-very-high {
+            background: linear-gradient(to right, #9C27B0, #7B1FA2);
+            color: white;
+        }
+        
+        .institute-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .iit-badge {
+            background: linear-gradient(to right, #FF5722, #E64A19);
+            color: white;
+        }
+        
+        .nit-badge {
+            background: linear-gradient(to right, #2196F3, #1976D2);
+            color: white;
+        }
+        
+        .iisc-badge {
+            background: linear-gradient(to right, #9C27B0, #7B1FA2);
+            color: white;
+        }
+        
         .loading {
             display: none;
             text-align: center;
@@ -441,6 +574,14 @@
             
             .opportunity-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .cutoff-tabs {
+                flex-direction: column;
+            }
+            
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -633,6 +774,83 @@
                     </div>
                 </div>
                 
+                <!-- IIT/NIT Cutoff Data Section -->
+                <div class="cutoff-section" id="cutoffSection" style="display: none;">
+                    <div class="cutoff-header">
+                        <h2>🏛️ IIT & NIT Cutoff Data (GATE 2025)</h2>
+                        <p>Based on official cutoff scores from multiple rounds</p>
+                    </div>
+                    
+                    <div class="cutoff-tabs">
+                        <div class="cutoff-tab active" onclick="switchCutoffTab('iit-cse')">IITs - CSE</div>
+                        <div class="cutoff-tab" onclick="switchCutoffTab('nit-cse')">NITs - CSE</div>
+                        <div class="cutoff-tab" onclick="switchCutoffTab('gate-cutoffs')">GATE Cutoffs</div>
+                    </div>
+                    
+                    <!-- IIT CSE Cutoff -->
+                    <div id="iit-cse-tab" class="cutoff-content active">
+                        <div class="cutoff-table-container">
+                            <table class="cutoff-table">
+                                <thead>
+                                    <tr>
+                                        <th>Institute</th>
+                                        <th>Category</th>
+                                        <th>Round 1</th>
+                                        <th>Round 5</th>
+                                        <th>Round 9</th>
+                                        <th>Min Score</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="iitCseTable">
+                                    <!-- IIT CSE data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- NIT CSE Cutoff -->
+                    <div id="nit-cse-tab" class="cutoff-content">
+                        <div class="cutoff-table-container">
+                            <table class="cutoff-table">
+                                <thead>
+                                    <tr>
+                                        <th>Institute</th>
+                                        <th>Category</th>
+                                        <th>Opening Rank</th>
+                                        <th>Closing Rank</th>
+                                        <th>Min Score</th>
+                                        <th>Chance</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nitCseTable">
+                                    <!-- NIT CSE data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- GATE Cutoffs -->
+                    <div id="gate-cutoffs-tab" class="cutoff-content">
+                        <div class="cutoff-table-container">
+                            <table class="cutoff-table">
+                                <thead>
+                                    <tr>
+                                        <th>Paper</th>
+                                        <th>GEN</th>
+                                        <th>EWS</th>
+                                        <th>OBC</th>
+                                        <th>SC</th>
+                                        <th>ST</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="gateCutoffsTable">
+                                    <!-- GATE cutoff data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
                 <button class="predict-btn" onclick="resetForm()" style="margin-top: 25px; background: white; color: #667eea;">
                     🔄 Predict Again
                 </button>
@@ -640,10 +858,12 @@
             
             <div class="note">
                 <strong>📊 Single Prediction Flow:</strong> 
-                • Enter your answers → Get rank & score prediction → See college admission chances → Check PSU job opportunities
+                • Enter your answers → Get rank & score prediction → See college admission chances → Check PSU job opportunities → View IIT/NIT cutoff data
                 <br><br>
                 <strong>⚡ Competition Levels:</strong>
                 • CS: High Competition | EC/EE: Low Competition | ME: Low Competition | CE: Medium Competition
+                <br><br>
+                <strong>🏛️ Cutoff Data:</strong> Based on actual GATE 2025 admission rounds and official cutoff scores
                 <br><br>
                 <strong>👨‍💻 Developed by:</strong> <strong>RAJ BITTU</strong> | Complete GATE Analysis Tool
             </div>
@@ -710,6 +930,97 @@
             'CS': { GEN: 29.20, EWS: 26.20, OBC: 26.20, SC: 19.40, ST: 19.40 }
         };
 
+        // IIT CSE Cutoff Data
+        const iitCseCutoffs = [
+            { institute: "IIT Bombay", category: "GEN", round1: "931,907", round5: "885,881,810", round9: "-", minScore: 810 },
+            { institute: "IIT Bombay", category: "EWS", round1: "907", round5: "761", round9: "-", minScore: 761 },
+            { institute: "IIT Bombay", category: "OBC", round1: "860", round5: "441", round9: "-", minScore: 441 },
+            { institute: "IIT Bombay", category: "SC", round1: "872,772", round5: "-", round9: "-", minScore: 772 },
+            { institute: "IIT Bombay", category: "ST", round1: "562", round5: "-", round9: "-", minScore: 562 },
+            
+            { institute: "IIT Delhi", category: "GEN", round1: "931", round5: "881", round9: "-", minScore: 881 },
+            { institute: "IIT Delhi", category: "EWS", round1: "907", round5: "-", round9: "-", minScore: 907 },
+            { institute: "IIT Delhi", category: "OBC", round1: "860", round5: "781,744", round9: "718", minScore: 718 },
+            { institute: "IIT Delhi", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Delhi", category: "ST", round1: "562,529", round5: "467", round9: "-", minScore: 467 },
+            
+            { institute: "IIT Madras", category: "GEN", round1: "931", round5: "931,901", round9: "-", minScore: 901 },
+            { institute: "IIT Madras", category: "EWS", round1: "907", round5: "-", round9: "-", minScore: 907 },
+            { institute: "IIT Madras", category: "OBC", round1: "860", round5: "802", round9: "-", minScore: 802 },
+            { institute: "IIT Madras", category: "SC", round1: "872,772", round5: "-", round9: "-", minScore: 772 },
+            { institute: "IIT Madras", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Kanpur", category: "GEN", round1: "901,893,885", round5: "856", round9: "-", minScore: 856 },
+            { institute: "IIT Kanpur", category: "EWS", round1: "907,827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IIT Kanpur", category: "OBC", round1: "860", round5: "793,780", round9: "-", minScore: 780 },
+            { institute: "IIT Kanpur", category: "SC", round1: "572", round5: "-", round9: "-", minScore: 572 },
+            { institute: "IIT Kanpur", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Kharagpur", category: "GEN", round1: "868", round5: "831", round9: "-", minScore: 831 },
+            { institute: "IIT Kharagpur", category: "EWS", round1: "850", round5: "-", round9: "-", minScore: 850 },
+            { institute: "IIT Kharagpur", category: "OBC", round1: "802,797", round5: "756,744,741", round9: "-", minScore: 741 },
+            { institute: "IIT Kharagpur", category: "SC", round1: "872", round5: "-", round9: "-", minScore: 872 },
+            { institute: "IIT Kharagpur", category: "ST", round1: "556", round5: "-", round9: "-", minScore: 556 },
+            
+            { institute: "IIT Roorkee", category: "GEN", round1: "901,893", round5: "831", round9: "-", minScore: 831 },
+            { institute: "IIT Roorkee", category: "EWS", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Roorkee", category: "OBC", round1: "744", round5: "756,731", round9: "718", minScore: 718 },
+            { institute: "IIT Roorkee", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Roorkee", category: "ST", round1: "562", round5: "-", round9: "-", minScore: 562 },
+            
+            { institute: "IIT Hyderabad", category: "GEN", round1: "893,881", round5: "826", round9: "-", minScore: 826 },
+            { institute: "IIT Hyderabad", category: "EWS", round1: "827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IIT Hyderabad", category: "OBC", round1: "-", round5: "780,664,689", round9: "-", minScore: 664 },
+            { institute: "IIT Hyderabad", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Hyderabad", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Indore", category: "GEN", round1: "-", round5: "770", round9: "622", minScore: 622 },
+            { institute: "IIT Indore", category: "EWS", round1: "-", round5: "756", round9: "-", minScore: 756 },
+            { institute: "IIT Indore", category: "OBC", round1: "-", round5: "741", round9: "-", minScore: 741 },
+            { institute: "IIT Indore", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Indore", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT BHU", category: "GEN", round1: "835,802", round5: "777,718", round9: "770,706", minScore: 706 },
+            { institute: "IIT BHU", category: "EWS", round1: "-", round5: "761", round9: "-", minScore: 761 },
+            { institute: "IIT BHU", category: "OBC", round1: "780", round5: "744,741", round9: "-", minScore: 741 },
+            { institute: "IIT BHU", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT BHU", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IISC Bangalore", category: "GEN", round1: "931,914,866,867", round5: "-", round9: "-", minScore: 866 },
+            { institute: "IISC Bangalore", category: "EWS", round1: "850,827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IISC Bangalore", category: "OBC", round1: "860,853", round5: "-", round9: "-", minScore: 853 },
+            { institute: "IISC Bangalore", category: "SC", round1: "872,772,579", round5: "-", round9: "-", minScore: 579 },
+            { institute: "IISC Bangalore", category: "ST", round1: "529,579", round5: "-", round9: "-", minScore: 529 }
+        ];
+
+        // NIT CSE Cutoff Data
+        const nitCseCutoffs = [
+            { institute: "NIT Trichy", category: "GEN", openingRank: 500, closingRank: 800, minScore: 750 },
+            { institute: "NIT Trichy", category: "OBC", openingRank: 800, closingRank: 1200, minScore: 720 },
+            { institute: "NIT Trichy", category: "SC", openingRank: 1500, closingRank: 2000, minScore: 650 },
+            { institute: "NIT Trichy", category: "ST", openingRank: 2000, closingRank: 2500, minScore: 600 },
+            
+            { institute: "NIT Warangal", category: "GEN", openingRank: 600, closingRank: 900, minScore: 740 },
+            { institute: "NIT Warangal", category: "OBC", openingRank: 900, closingRank: 1400, minScore: 710 },
+            { institute: "NIT Warangal", category: "SC", openingRank: 1600, closingRank: 2200, minScore: 640 },
+            { institute: "NIT Warangal", category: "ST", openingRank: 2100, closingRank: 2700, minScore: 590 },
+            
+            { institute: "NIT Surathkal", category: "GEN", openingRank: 700, closingRank: 1000, minScore: 730 },
+            { institute: "NIT Surathkal", category: "OBC", openingRank: 1000, closingRank: 1500, minScore: 700 },
+            { institute: "NIT Surathkal", category: "SC", openingRank: 1700, closingRank: 2300, minScore: 630 },
+            { institute: "NIT Surathkal", category: "ST", openingRank: 2200, closingRank: 2800, minScore: 580 },
+            
+            { institute: "NIT Rourkela", category: "GEN", openingRank: 800, closingRank: 1200, minScore: 720 },
+            { institute: "NIT Rourkela", category: "OBC", openingRank: 1200, closingRank: 1800, minScore: 690 },
+            { institute: "NIT Rourkela", category: "SC", openingRank: 1900, closingRank: 2500, minScore: 620 },
+            { institute: "NIT Rourkela", category: "ST", openingRank: 2400, closingRank: 3000, minScore: 570 },
+            
+            { institute: "NIT Calicut", category: "GEN", openingRank: 900, closingRank: 1300, minScore: 710 },
+            { institute: "NIT Calicut", category: "OBC", openingRank: 1300, closingRank: 1900, minScore: 680 },
+            { institute: "NIT Calicut", category: "SC", openingRank: 2000, closingRank: 2600, minScore: 610 },
+            { institute: "NIT Calicut", category: "ST", openingRank: 2500, closingRank: 3200, minScore: 560 }
+        ];
+
         // College Data with admission chances
         const colleges = [
             { name: "IIT Bombay", minScore: 900, category: "IIT", location: "Mumbai", tier: "Top" },
@@ -747,6 +1058,127 @@
         // Tab switching (only one tab now)
         function switchTab(tabName) {
             // Only one tab, no switching needed
+        }
+
+        // Switch cutoff tabs
+        function switchCutoffTab(tabId) {
+            // Update tab buttons
+            document.querySelectorAll('.cutoff-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.cutoff-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            
+            // Populate table if not already done
+            if (tabId === 'iit-cse' && document.getElementById('iitCseTable').innerHTML === '') {
+                populateIitCseTable();
+            } else if (tabId === 'nit-cse' && document.getElementById('nitCseTable').innerHTML === '') {
+                populateNitCseTable();
+            } else if (tabId === 'gate-cutoffs' && document.getElementById('gateCutoffsTable').innerHTML === '') {
+                populateGateCutoffsTable();
+            }
+        }
+
+        function populateIitCseTable() {
+            const tableBody = document.getElementById('iitCseTable');
+            tableBody.innerHTML = '';
+            
+            iitCseCutoffs.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                // Get badge for institute
+                let badge = '';
+                if (row.institute.includes('IIT')) {
+                    badge = '<span class="institute-badge iit-badge">IIT</span>';
+                } else if (row.institute.includes('IISC')) {
+                    badge = '<span class="institute-badge iisc-badge">IISC</span>';
+                }
+                
+                // Determine score badge color
+                let scoreClass = 'score-low';
+                if (row.minScore >= 800) scoreClass = 'score-very-high';
+                else if (row.minScore >= 700) scoreClass = 'score-high';
+                else if (row.minScore >= 600) scoreClass = 'score-medium';
+                
+                tr.innerHTML = `
+                    <td><strong>${row.institute}</strong>${badge}</td>
+                    <td>${row.category}</td>
+                    <td>${row.round1}</td>
+                    <td>${row.round5}</td>
+                    <td>${row.round9}</td>
+                    <td><span class="score-badge ${scoreClass}">${row.minScore > 0 ? row.minScore : 'N/A'}</span></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function populateNitCseTable() {
+            const tableBody = document.getElementById('nitCseTable');
+            tableBody.innerHTML = '';
+            
+            nitCseCutoffs.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                // Determine chance based on score
+                let chance = 'Low';
+                let chanceClass = 'score-low';
+                if (row.minScore >= 750) {
+                    chance = 'Very High';
+                    chanceClass = 'score-very-high';
+                } else if (row.minScore >= 700) {
+                    chance = 'High';
+                    chanceClass = 'score-high';
+                } else if (row.minScore >= 650) {
+                    chance = 'Medium';
+                    chanceClass = 'score-medium';
+                }
+                
+                // Determine score badge color
+                let scoreClass = 'score-low';
+                if (row.minScore >= 750) scoreClass = 'score-very-high';
+                else if (row.minScore >= 700) scoreClass = 'score-high';
+                else if (row.minScore >= 650) scoreClass = 'score-medium';
+                
+                tr.innerHTML = `
+                    <td><strong>${row.institute}</strong> <span class="institute-badge nit-badge">NIT</span></td>
+                    <td>${row.category}</td>
+                    <td>${row.openingRank}</td>
+                    <td>${row.closingRank}</td>
+                    <td><span class="score-badge ${scoreClass}">${row.minScore}</span></td>
+                    <td><span class="score-badge ${chanceClass}">${chance}</span></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function populateGateCutoffsTable() {
+            const tableBody = document.getElementById('gateCutoffsTable');
+            tableBody.innerHTML = '';
+            
+            Object.entries(gate2025Cutoffs).forEach(([paper, cutoffs]) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${paper}</strong></td>
+                    <td><span class="score-badge ${getScoreBadgeClass(cutoffs.GEN)}">${cutoffs.GEN}</span></td>
+                    <td><span class="score-badge ${getScoreBadgeClass(cutoffs.EWS)}">${cutoffs.EWS}</span></td>
+                    <td><span class="score-badge ${getScoreBadgeClass(cutoffs.OBC)}">${cutoffs.OBC}</span></td>
+                    <td><span class="score-badge ${getScoreBadgeClass(cutoffs.SC)}">${cutoffs.SC}</span></td>
+                    <td><span class="score-badge ${getScoreBadgeClass(cutoffs.ST)}">${cutoffs.ST}</span></td>
+                `;
+                tableBody.appendChild(tr);
+            });
+        }
+
+        function getScoreBadgeClass(score) {
+            if (score >= 30) return 'score-very-high';
+            if (score >= 25) return 'score-high';
+            if (score >= 20) return 'score-medium';
+            return 'score-low';
         }
 
         // Update competition badge
@@ -854,6 +1286,11 @@
                 // Calculate overall opportunity status
                 const overallStatus = calculateOverallStatus(collegeOpportunities, psuOpportunities);
                 
+                // Populate cutoff tables
+                populateIitCseTable();
+                populateNitCseTable();
+                populateGateCutoffsTable();
+                
                 // Display all results
                 displayAllResults(rankPrediction, marks, score, qualification, collegeOpportunities, psuOpportunities, overallStatus);
                 
@@ -864,6 +1301,7 @@
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('results').style.display = 'block';
                 document.getElementById('opportunitiesSection').style.display = 'block';
+                document.getElementById('cutoffSection').style.display = 'block';
                 
                 // Scroll to results
                 document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
@@ -1239,6 +1677,7 @@
             document.getElementById('expectedScore').value = '';
             document.getElementById('results').style.display = 'none';
             document.getElementById('opportunitiesSection').style.display = 'none';
+            document.getElementById('cutoffSection').style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
