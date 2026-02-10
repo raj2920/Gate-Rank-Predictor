@@ -617,6 +617,22 @@
             font-weight: bold;
         }
         
+        .auto-calc-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        
+        .auto-calc-btn:hover {
+            background: #5a67d8;
+        }
+        
         @media (max-width: 768px) {
             .input-sections {
                 grid-template-columns: 1fr;
@@ -701,6 +717,10 @@
                                 <option value="ST">ST</option>
                             </select>
                         </div>
+                        
+                        <button class="auto-calc-btn" onclick="fillSampleData()">
+                            📊 Fill Sample Data (CS Paper)
+                        </button>
                     </div>
                     
                     <div class="input-section">
@@ -735,13 +755,20 @@
                         
                         <div class="form-group">
                             <label>Calculated Marks (Out of 100):</label>
-                            <input type="number" id="calculatedMarks" readonly style="background: #e9ecef;">
+                            <input type="number" id="calculatedMarks" readonly style="background: #e9ecef; font-weight: bold;">
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                Formula: (Correct × Marks) - (Wrong × 0.33 for 1-mark, 0.66 for 2-mark)
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label>Expected GATE Score (Out of 1000):</label>
-                            <input type="number" id="expectedScore" readonly style="background: #e9ecef;">
+                            <input type="number" id="expectedScore" readonly style="background: #e9ecef; font-weight: bold;">
                         </div>
+                        
+                        <button class="auto-calc-btn" onclick="calculateMarks()">
+                            🔄 Calculate Marks Now
+                        </button>
                     </div>
                 </div>
                 
@@ -997,14 +1024,652 @@
     </div>
 
     <script>
-        // GATE 2025 data and cutoff data remains the same...
-        // IIT CSE cutoff data...
-        // NIT CSE cutoff data...
-        // College and PSU data...
+        // GATE 2025 data
+        const gate2025Data = [
+            { rank: 1, score: 1000, marks: 100 },
+            { rank: 4, score: 985, marks: 91.64 },
+            { rank: 8, score: 976, marks: 90.75 },
+            { rank: 12, score: 959, marks: 89.04 },
+            { rank: 14, score: 956, marks: 88.71 },
+            { rank: 32, score: 929, marks: 86.11 },
+            { rank: 38, score: 922, marks: 85.43 },
+            { rank: 58, score: 906, marks: 83.84 },
+            { rank: 65, score: 903, marks: 83.51 },
+            { rank: 130, score: 860, marks: 79.29 },
+            { rank: 215, score: 833, marks: 76.69 },
+            { rank: 306, score: 810, marks: 74.38 },
+            { rank: 308, score: 810, marks: 74.38 },
+            { rank: 336, score: 802, marks: 73.57 },
+            { rank: 351, score: 797, marks: 73.16 },
+            { rank: 365, score: 797, marks: 73.11 },
+            { rank: 416, score: 785, marks: 71.93 },
+            { rank: 532, score: 767, marks: 70.2 },
+            { rank: 609, score: 757, marks: 69.21 },
+            { rank: 622, score: 756, marks: 69.07 },
+            { rank: 724, score: 744, marks: 67.91 },
+            { rank: 1121, score: 711, marks: 64.66 },
+            { rank: 1171, score: 708, marks: 64.34 },
+            { rank: 1414, score: 689, marks: 62.52 },
+            { rank: 1445, score: 688, marks: 62.39 },
+            { rank: 1605, score: 649, marks: 58.47 },
+            { rank: 2434, score: 632, marks: 56.87 },
+            { rank: 2498, score: 628, marks: 56.54 },
+            { rank: 3466, score: 589, marks: 52.7 },
+            { rank: 4135, score: 568, marks: 50.65 },
+            { rank: 5620, score: 529, marks: 46.79 },
+            { rank: 6600, score: 506, marks: 44.52 },
+            { rank: 9288, score: 460, marks: 40.02 },
+            { rank: 11184, score: 436, marks: 37.69 },
+            { rank: 11318, score: 435, marks: 37.56 },
+            { rank: 11517, score: 433, marks: 37.37 },
+            { rank: 12652, score: 420, marks: 36.07 },
+            { rank: 14720, score: 400, marks: 34.12 },
+            { rank: 18757, score: 368, marks: 31.01 },
+            { rank: 19661, score: 364, marks: 30.54 },
+            { rank: 23003, score: 343, marks: 28.56 }
+        ];
+
+        // GATE 2025 Cutoff Data
+        const gate2025Cutoffs = {
+            'CE': { GEN: 29.20, EWS: 26.20, OBC: 26.20, SC: 19.40, ST: 19.40 },
+            'ME': { GEN: 35.80, EWS: 32.20, OBC: 32.20, SC: 23.80, ST: 23.80 },
+            'EE': { GEN: 25.00, EWS: 22.50, OBC: 22.50, SC: 16.60, ST: 16.60 },
+            'EC': { GEN: 25.00, EWS: 22.50, OBC: 22.50, SC: 16.60, ST: 16.60 },
+            'CS': { GEN: 29.20, EWS: 26.20, OBC: 26.20, SC: 19.40, ST: 19.40 }
+        };
+
+        // IIT CSE Cutoff Data
+        const iitCseCutoffs = [
+            { institute: "IIT Bombay", category: "GEN", round1: "931,907", round5: "885,881,810", round9: "-", minScore: 810 },
+            { institute: "IIT Bombay", category: "EWS", round1: "907", round5: "761", round9: "-", minScore: 761 },
+            { institute: "IIT Bombay", category: "OBC", round1: "860", round5: "441", round9: "-", minScore: 441 },
+            { institute: "IIT Bombay", category: "SC", round1: "872,772", round5: "-", round9: "-", minScore: 772 },
+            { institute: "IIT Bombay", category: "ST", round1: "562", round5: "-", round9: "-", minScore: 562 },
+            
+            { institute: "IIT Delhi", category: "GEN", round1: "931", round5: "881", round9: "-", minScore: 881 },
+            { institute: "IIT Delhi", category: "EWS", round1: "907", round5: "-", round9: "-", minScore: 907 },
+            { institute: "IIT Delhi", category: "OBC", round1: "860", round5: "781,744", round9: "718", minScore: 718 },
+            { institute: "IIT Delhi", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Delhi", category: "ST", round1: "562,529", round5: "467", round9: "-", minScore: 467 },
+            
+            { institute: "IIT Madras", category: "GEN", round1: "931", round5: "931,901", round9: "-", minScore: 901 },
+            { institute: "IIT Madras", category: "EWS", round1: "907", round5: "-", round9: "-", minScore: 907 },
+            { institute: "IIT Madras", category: "OBC", round1: "860", round5: "802", round9: "-", minScore: 802 },
+            { institute: "IIT Madras", category: "SC", round1: "872,772", round5: "-", round9: "-", minScore: 772 },
+            { institute: "IIT Madras", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Kanpur", category: "GEN", round1: "901,893,885", round5: "856", round9: "-", minScore: 856 },
+            { institute: "IIT Kanpur", category: "EWS", round1: "907,827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IIT Kanpur", category: "OBC", round1: "860", round5: "793,780", round9: "-", minScore: 780 },
+            { institute: "IIT Kanpur", category: "SC", round1: "572", round5: "-", round9: "-", minScore: 572 },
+            { institute: "IIT Kanpur", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Kharagpur", category: "GEN", round1: "868", round5: "831", round9: "-", minScore: 831 },
+            { institute: "IIT Kharagpur", category: "EWS", round1: "850", round5: "-", round9: "-", minScore: 850 },
+            { institute: "IIT Kharagpur", category: "OBC", round1: "802,797", round5: "756,744,741", round9: "-", minScore: 741 },
+            { institute: "IIT Kharagpur", category: "SC", round1: "872", round5: "-", round9: "-", minScore: 872 },
+            { institute: "IIT Kharagpur", category: "ST", round1: "556", round5: "-", round9: "-", minScore: 556 },
+            
+            { institute: "IIT Roorkee", category: "GEN", round1: "901,893", round5: "831", round9: "-", minScore: 831 },
+            { institute: "IIT Roorkee", category: "EWS", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Roorkee", category: "OBC", round1: "744", round5: "756,731", round9: "718", minScore: 718 },
+            { institute: "IIT Roorkee", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Roorkee", category: "ST", round1: "562", round5: "-", round9: "-", minScore: 562 },
+            
+            { institute: "IIT Hyderabad", category: "GEN", round1: "893,881", round5: "826", round9: "-", minScore: 826 },
+            { institute: "IIT Hyderabad", category: "EWS", round1: "827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IIT Hyderabad", category: "OBC", round1: "-", round5: "780,664,689", round9: "-", minScore: 664 },
+            { institute: "IIT Hyderabad", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Hyderabad", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT Indore", category: "GEN", round1: "-", round5: "770", round9: "622", minScore: 622 },
+            { institute: "IIT Indore", category: "EWS", round1: "-", round5: "756", round9: "-", minScore: 756 },
+            { institute: "IIT Indore", category: "OBC", round1: "-", round5: "741", round9: "-", minScore: 741 },
+            { institute: "IIT Indore", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT Indore", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IIT BHU", category: "GEN", round1: "835,802", round5: "777,718", round9: "770,706", minScore: 706 },
+            { institute: "IIT BHU", category: "EWS", round1: "-", round5: "761", round9: "-", minScore: 761 },
+            { institute: "IIT BHU", category: "OBC", round1: "780", round5: "744,741", round9: "-", minScore: 741 },
+            { institute: "IIT BHU", category: "SC", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            { institute: "IIT BHU", category: "ST", round1: "-", round5: "-", round9: "-", minScore: 0 },
+            
+            { institute: "IISC Bangalore", category: "GEN", round1: "931,914,866,867", round5: "-", round9: "-", minScore: 866 },
+            { institute: "IISC Bangalore", category: "EWS", round1: "850,827", round5: "-", round9: "-", minScore: 827 },
+            { institute: "IISC Bangalore", category: "OBC", round1: "860,853", round5: "-", round9: "-", minScore: 853 },
+            { institute: "IISC Bangalore", category: "SC", round1: "872,772,579", round5: "-", round9: "-", minScore: 579 },
+            { institute: "IISC Bangalore", category: "ST", round1: "529,579", round5: "-", round9: "-", minScore: 529 }
+        ];
+
+        // NIT CSE Cutoff Data
+        const nitCseCutoffs = [
+            { institute: "NIT Trichy", category: "GEN", openingRank: 500, closingRank: 800, minScore: 750 },
+            { institute: "NIT Trichy", category: "OBC", openingRank: 800, closingRank: 1200, minScore: 720 },
+            { institute: "NIT Trichy", category: "SC", openingRank: 1500, closingRank: 2000, minScore: 650 },
+            { institute: "NIT Trichy", category: "ST", openingRank: 2000, closingRank: 2500, minScore: 600 },
+            
+            { institute: "NIT Warangal", category: "GEN", openingRank: 600, closingRank: 900, minScore: 740 },
+            { institute: "NIT Warangal", category: "OBC", openingRank: 900, closingRank: 1400, minScore: 710 },
+            { institute: "NIT Warangal", category: "SC", openingRank: 1600, closingRank: 2200, minScore: 640 },
+            { institute: "NIT Warangal", category: "ST", openingRank: 2100, closingRank: 2700, minScore: 590 },
+            
+            { institute: "NIT Surathkal", category: "GEN", openingRank: 700, closingRank: 1000, minScore: 730 },
+            { institute: "NIT Surathkal", category: "OBC", openingRank: 1000, closingRank: 1500, minScore: 700 },
+            { institute: "NIT Surathkal", category: "SC", openingRank: 1700, closingRank: 2300, minScore: 630 },
+            { institute: "NIT Surathkal", category: "ST", openingRank: 2200, closingRank: 2800, minScore: 580 },
+            
+            { institute: "NIT Rourkela", category: "GEN", openingRank: 800, closingRank: 1200, minScore: 720 },
+            { institute: "NIT Rourkela", category: "OBC", openingRank: 1200, closingRank: 1800, minScore: 690 },
+            { institute: "NIT Rourkela", category: "SC", openingRank: 1900, closingRank: 2500, minScore: 620 },
+            { institute: "NIT Rourkela", category: "ST", openingRank: 2400, closingRank: 3000, minScore: 570 },
+            
+            { institute: "NIT Calicut", category: "GEN", openingRank: 900, closingRank: 1300, minScore: 710 },
+            { institute: "NIT Calicut", category: "OBC", openingRank: 1300, closingRank: 1900, minScore: 680 },
+            { institute: "NIT Calicut", category: "SC", openingRank: 2000, closingRank: 2600, minScore: 610 },
+            { institute: "NIT Calicut", category: "ST", openingRank: 2500, closingRank: 3200, minScore: 560 }
+        ];
+
+        // College Data with admission chances
+        const colleges = [
+            { name: "IIT Bombay", minScore: 900, category: "IIT", location: "Mumbai", tier: "Top" },
+            { name: "IIT Delhi", minScore: 880, category: "IIT", location: "Delhi", tier: "Top" },
+            { name: "IIT Madras", minScore: 870, category: "IIT", location: "Chennai", tier: "Top" },
+            { name: "IIT Kanpur", minScore: 850, category: "IIT", location: "Kanpur", tier: "Top" },
+            { name: "IIT Kharagpur", minScore: 840, category: "IIT", location: "Kharagpur", tier: "Top" },
+            { name: "IIT Roorkee", minScore: 830, category: "IIT", location: "Roorkee", tier: "Top" },
+            { name: "NIT Trichy", minScore: 750, category: "NIT", location: "Tiruchirappalli", tier: "Excellent" },
+            { name: "NIT Warangal", minScore: 740, category: "NIT", location: "Warangal", tier: "Excellent" },
+            { name: "IIIT Hyderabad", minScore: 760, category: "IIIT", location: "Hyderabad", tier: "Excellent" },
+            { name: "DTU Delhi", minScore: 720, category: "University", location: "Delhi", tier: "Good" },
+            { name: "NSIT Delhi", minScore: 710, category: "University", location: "Delhi", tier: "Good" },
+            { name: "State Government College", minScore: 600, category: "Government", location: "Various", tier: "Average" }
+        ];
+
+        // PSU Data with job opportunities
+        const psus = [
+            { name: "DRDO", minScore: 780, category: "Research", branch: "All", package: "High" },
+            { name: "ISRO", minScore: 800, category: "Research", branch: "All", package: "High" },
+            { name: "ONGC", minScore: 750, category: "Maharatna", branch: "All", package: "High" },
+            { name: "BHEL", minScore: 720, category: "Maharatna", branch: "All", package: "High" },
+            { name: "NTPC", minScore: 700, category: "Maharatna", branch: "All", package: "High" },
+            { name: "GAIL", minScore: 680, category: "Maharatna", branch: "All", package: "Medium" },
+            { name: "Power Grid", minScore: 690, category: "Maharatna", branch: "EE/EC", package: "High" },
+            { name: "BEL", minScore: 710, category: "Navratna", branch: "EC/CS", package: "Medium" },
+            { name: "IOCL", minScore: 650, category: "Maharatna", branch: "All", package: "Medium" },
+            { name: "SAIL", minScore: 650, category: "Maharatna", branch: "All", package: "Medium" },
+            { name: "BPCL", minScore: 670, category: "Maharatna", branch: "All", package: "Medium" },
+            { name: "HPCL", minScore: 660, category: "Maharatna", branch: "All", package: "Medium" }
+        ];
 
         let scoreChart = null;
         let userScore = 0;
         let userCategory = 'GEN';
+
+        // Fill sample data for testing
+        function fillSampleData() {
+            document.getElementById('correct1').value = '18';
+            document.getElementById('wrong1').value = '4';
+            document.getElementById('correct2').value = '22';
+            document.getElementById('wrong2').value = '6';
+            document.getElementById('paperCode').value = 'CS';
+            updateCompetition();
+            calculateMarks();
+        }
+
+        // Calculate marks and score
+        function calculateMarks() {
+            const correct1 = parseInt(document.getElementById('correct1').value) || 0;
+            const wrong1 = parseInt(document.getElementById('wrong1').value) || 0;
+            const correct2 = parseInt(document.getElementById('correct2').value) || 0;
+            const wrong2 = parseInt(document.getElementById('wrong2').value) || 0;
+            
+            // Calculate marks
+            const marks = (correct1 * 1) - (wrong1 * 0.33) + (correct2 * 2) - (wrong2 * 0.66);
+            const finalMarks = Math.max(0, parseFloat(marks.toFixed(2)));
+            
+            // Calculate score from marks
+            const score = marksToScore(finalMarks);
+            
+            // Update display
+            document.getElementById('calculatedMarks').value = finalMarks.toFixed(2);
+            document.getElementById('expectedScore').value = score.toFixed(2);
+            
+            return { marks: finalMarks, score: score };
+        }
+
+        function marksToScore(marks) {
+            if (marks >= 100) return 1000;
+            if (marks <= 28.56) return 343;
+            
+            const sortedData = [...gate2025Data].sort((a, b) => a.marks - b.marks);
+            
+            for (let i = 0; i < sortedData.length - 1; i++) {
+                if (marks >= sortedData[i].marks && marks <= sortedData[i + 1].marks) {
+                    const ratio = (marks - sortedData[i].marks) / (sortedData[i + 1].marks - sortedData[i].marks);
+                    return sortedData[i].score + (sortedData[i + 1].score - sortedData[i].score) * ratio;
+                }
+            }
+            
+            return 343 + (marks - 28.56) * (657 / 71.44);
+        }
+
+        // Main prediction function
+        function predictEverything() {
+            // First calculate marks
+            const result = calculateMarks();
+            const marks = result.marks;
+            userScore = result.score;
+            
+            if (marks === 0) {
+                alert('Please enter your answer details first. Click "Fill Sample Data" for a quick test.');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            
+            // Get inputs
+            const paper = document.getElementById('paperCode').value;
+            userCategory = document.getElementById('category').value;
+            
+            // Simulate processing
+            setTimeout(() => {
+                // Predict rank
+                const rankPrediction = predictRank(userScore, paper, userCategory);
+                
+                // Check qualification
+                const qualification = checkQualification(marks, paper, userCategory);
+                
+                // Predict college opportunities
+                const collegeOpportunities = predictCollegeOpportunities(userScore, paper);
+                
+                // Predict PSU opportunities
+                const psuOpportunities = predictPSUOpportunities(userScore, paper);
+                
+                // Calculate overall opportunity status
+                const overallStatus = calculateOverallStatus(collegeOpportunities, psuOpportunities);
+                
+                // Populate cutoff tables
+                populateIitCseTable();
+                populateNitCseTable();
+                populateTopIitsTable();
+                
+                // Display all results
+                displayAllResults(rankPrediction, marks, userScore, qualification, collegeOpportunities, psuOpportunities, overallStatus);
+                
+                // Create score graph
+                createScoreGraph(userScore, rankPrediction.rank);
+                
+                // Hide loading, show results
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('opportunitiesSection').style.display = 'block';
+                document.getElementById('cutoffSection').style.display = 'block';
+                
+                // Scroll to results
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }, 500);
+        }
+
+        function predictRank(score, paper, category) {
+            // Competition multipliers
+            const competitionMultipliers = {
+                'CS': 0.7,   // High competition
+                'CE': 0.85,  // Medium competition
+                'EC': 1.0,   // Low competition
+                'EE': 1.0,   // Low competition
+                'ME': 1.0    // Low competition
+            };
+            
+            // Base rank estimation
+            let estimatedRank = estimateRankFromScore(score);
+            
+            // Apply competition multiplier
+            estimatedRank = Math.round(estimatedRank * (competitionMultipliers[paper] || 1));
+            
+            // Category adjustments
+            const categoryMultipliers = {
+                'GEN': 1.0,
+                'EWS': 1.8,
+                'OBC': 2.0,
+                'SC': 3.5,
+                'ST': 5.0
+            };
+            
+            const categoryWiseRank = {};
+            for (const [cat, multiplier] of Object.entries(categoryMultipliers)) {
+                categoryWiseRank[cat] = Math.max(1, Math.round(estimatedRank * multiplier));
+            }
+            
+            // Calculate percentile
+            const estimatedCandidates = 150000;
+            const percentile = ((estimatedCandidates - estimatedRank) / estimatedCandidates * 100).toFixed(2);
+            
+            return {
+                rank: Math.max(1, Math.round(estimatedRank * categoryMultipliers[category])),
+                rankRange: `${Math.round(estimatedRank * 0.8)} - ${Math.round(estimatedRank * 1.2)}`,
+                categoryWiseRank: categoryWiseRank,
+                percentile: percentile
+            };
+        }
+
+        function estimateRankFromScore(score) {
+            if (score >= 1000) return 1;
+            if (score <= 343) return 23003;
+            
+            const sortedData = [...gate2025Data].sort((a, b) => a.score - b.score);
+            
+            for (let i = 0; i < sortedData.length - 1; i++) {
+                if (score >= sortedData[i].score && score <= sortedData[i + 1].score) {
+                    const ratio = (score - sortedData[i].score) / (sortedData[i + 1].score - sortedData[i].score);
+                    const logRank1 = Math.log(sortedData[i].rank);
+                    const logRank2 = Math.log(sortedData[i + 1].rank);
+                    const estimatedLogRank = logRank1 + (logRank2 - logRank1) * ratio;
+                    return Math.exp(estimatedLogRank);
+                }
+            }
+            
+            return Math.pow(1000 / score, 4) * 23003;
+        }
+
+        function checkQualification(marks, paper, category) {
+            const cutoffs = gate2025Cutoffs[paper] || gate2025Cutoffs['CS'];
+            const cutoff = cutoffs[category] || cutoffs['GEN'];
+            
+            // Add some buffer for 2026
+            const adjustedCutoff = cutoff - 1;
+            
+            return {
+                qualified: marks >= adjustedCutoff,
+                cutoff: cutoff,
+                marks: marks,
+                difference: (marks - adjustedCutoff).toFixed(2)
+            };
+        }
+
+        function predictCollegeOpportunities(score, paper) {
+            const eligibleColleges = colleges.filter(college => 
+                score >= college.minScore
+            );
+            
+            // Sort by minScore (higher scores first)
+            const sortedColleges = eligibleColleges.sort((a, b) => b.minScore - a.minScore);
+            
+            // Calculate chance for each college
+            const collegesWithChance = sortedColleges.map(college => {
+                let chance = 'low';
+                if (score >= college.minScore + 50) chance = 'high';
+                else if (score >= college.minScore + 20) chance = 'medium';
+                
+                return {
+                    ...college,
+                    chance: chance,
+                    yourScore: score
+                };
+            });
+            
+            return collegesWithChance.slice(0, 6); // Return top 6 colleges
+        }
+
+        function predictPSUOpportunities(score, paper) {
+            const eligiblePSUs = psus.filter(psu => 
+                score >= psu.minScore && 
+                (psu.branch === 'All' || psu.branch.includes(paper))
+            );
+            
+            // Sort by minScore (higher scores first)
+            const sortedPSUs = eligiblePSUs.sort((a, b) => b.minScore - a.minScore);
+            
+            // Calculate chance for each PSU
+            const psusWithChance = sortedPSUs.map(psu => {
+                let chance = 'low';
+                if (score >= psu.minScore + 50) chance = 'high';
+                else if (score >= psu.minScore + 20) chance = 'medium';
+                
+                return {
+                    ...psu,
+                    chance: chance,
+                    yourScore: score
+                };
+            });
+            
+            return psusWithChance.slice(0, 6); // Return top 6 PSUs
+        }
+
+        function calculateOverallStatus(collegeOpportunities, psuOpportunities) {
+            const totalOpportunities = collegeOpportunities.length + psuOpportunities.length;
+            const highChanceCount = collegeOpportunities.filter(c => c.chance === 'high').length + 
+                                   psuOpportunities.filter(p => p.chance === 'high').length;
+            
+            if (totalOpportunities === 0) {
+                return {
+                    status: 'poor',
+                    message: 'You need to improve your score for better opportunities',
+                    color: '#f44336'
+                };
+            } else if (highChanceCount >= 4) {
+                return {
+                    status: 'excellent',
+                    message: 'Excellent opportunities for college admission and PSU jobs!',
+                    color: '#4CAF50'
+                };
+            } else if (highChanceCount >= 2) {
+                return {
+                    status: 'good',
+                    message: 'Good opportunities available in both colleges and PSUs',
+                    color: '#FF9800'
+                };
+            } else {
+                return {
+                    status: 'moderate',
+                    message: 'Moderate opportunities - consider improving your score',
+                    color: '#2196F3'
+                };
+            }
+        }
+
+        function displayAllResults(rankPrediction, marks, score, qualification, colleges, psus, overallStatus) {
+            // Display basic results
+            document.getElementById('predictedRank').textContent = `AIR ${Math.round(rankPrediction.rank)}`;
+            document.getElementById('rankRange').textContent = `Range: ${rankPrediction.rankRange}`;
+            document.getElementById('predictedScore').textContent = score.toFixed(2);
+            document.getElementById('predictedMarks').textContent = marks.toFixed(2);
+            document.getElementById('percentile').textContent = `${rankPrediction.percentile}%`;
+            document.getElementById('percentile').nextElementSibling.textContent = 
+                `Top ${rankPrediction.percentile}% of candidates`;
+            
+            // Display category ranks
+            document.getElementById('rankGEN').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.GEN)}`;
+            document.getElementById('rankOBC').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.OBC)}`;
+            document.getElementById('rankSC').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.SC)}`;
+            document.getElementById('rankST').textContent = `AIR ${Math.round(rankPrediction.categoryWiseRank.ST)}`;
+            
+            // Display qualification status
+            const qualResult = document.getElementById('qualificationResult');
+            const cutoffDetails = document.getElementById('cutoffDetails');
+            
+            if (qualification.qualified) {
+                qualResult.className = 'qualified';
+                qualResult.textContent = '✅ QUALIFIED FOR GATE 2026';
+                cutoffDetails.textContent = `Your marks: ${qualification.marks} | Cutoff: ${qualification.cutoff} | Margin: +${qualification.difference}`;
+            } else {
+                qualResult.className = 'not-qualified';
+                qualResult.textContent = '❌ NOT QUALIFIED FOR GATE 2026';
+                cutoffDetails.textContent = `Your marks: ${qualification.marks} | Cutoff: ${qualification.cutoff} | Required: +${Math.abs(qualification.difference)}`;
+            }
+            
+            // Display overall opportunity status
+            document.getElementById('opportunityStatus').innerHTML = `
+                <span style="color: ${overallStatus.color}">${overallStatus.message}</span>
+            `;
+            
+            // Display college opportunities
+            const collegeList = document.getElementById('collegeList');
+            const collegeSummary = document.getElementById('collegeSummary');
+            collegeList.innerHTML = '';
+            
+            if (colleges.length > 0) {
+                colleges.forEach(college => {
+                    const li = document.createElement('li');
+                    li.className = 'college-item';
+                    
+                    const chanceClass = college.chance === 'high' ? 'high-chance' : 
+                                      college.chance === 'medium' ? 'medium-chance' : 'low-chance';
+                    
+                    li.innerHTML = `
+                        <div>
+                            <div class="college-name">${college.name}</div>
+                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                ${college.location} • ${college.tier}
+                            </div>
+                            <span class="chance-indicator ${chanceClass}">
+                                ${college.chance.toUpperCase()} CHANCE
+                            </span>
+                        </div>
+                        <div class="college-score">Min: ${college.minScore}</div>
+                    `;
+                    collegeList.appendChild(li);
+                });
+                
+                const highChanceColleges = colleges.filter(c => c.chance === 'high').length;
+                collegeSummary.innerHTML = `${highChanceColleges} high chance colleges | Total: ${colleges.length} colleges`;
+            } else {
+                collegeList.innerHTML = '<li class="college-item">No college admission chances with current score</li>';
+                collegeSummary.innerHTML = 'Improve your score for better college opportunities';
+            }
+            
+            // Display PSU opportunities
+            const psuList = document.getElementById('psuList');
+            const psuSummary = document.getElementById('psuSummary');
+            psuList.innerHTML = '';
+            
+            if (psus.length > 0) {
+                psus.forEach(psu => {
+                    const li = document.createElement('li');
+                    li.className = 'psu-item';
+                    
+                    const chanceClass = psu.chance === 'high' ? 'high-chance' : 
+                                      psu.chance === 'medium' ? 'medium-chance' : 'low-chance';
+                    
+                    li.innerHTML = `
+                        <div>
+                            <div class="psu-name">${psu.name}</div>
+                            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.8);">
+                                ${psu.category} • Package: ${psu.package}
+                            </div>
+                            <span class="chance-indicator ${chanceClass}">
+                                ${psu.chance.toUpperCase()} CHANCE
+                            </span>
+                        </div>
+                        <div class="psu-cutoff">Min: ${psu.minScore}</div>
+                    `;
+                    psuList.appendChild(li);
+                });
+                
+                const highChancePSUs = psus.filter(p => p.chance === 'high').length;
+                psuSummary.innerHTML = `${highChancePSUs} high chance PSUs | Total: ${psus.length} PSUs`;
+            } else {
+                psuList.innerHTML = '<li class="psu-item">No PSU job opportunities with current score</li>';
+                psuSummary.innerHTML = 'Improve your score for PSU job opportunities';
+            }
+        }
+
+        function createScoreGraph(score, rank) {
+            const ctx = document.getElementById('scoreChart').getContext('2d');
+            
+            // Destroy previous chart if exists
+            if (scoreChart) {
+                scoreChart.destroy();
+            }
+            
+            // Prepare smoothed data
+            const smoothedScores = [];
+            const smoothedRanks = [];
+            const step = Math.ceil(gate2025Data.length / 30);
+            
+            for (let i = 0; i < gate2025Data.length; i += step) {
+                smoothedScores.push(gate2025Data[i].score);
+                smoothedRanks.push(gate2025Data[i].rank);
+            }
+            
+            scoreChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: smoothedRanks.map(r => `Rank ${r}`),
+                    datasets: [{
+                        label: 'GATE 2025 Score Distribution',
+                        data: smoothedScores,
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 2
+                    }, {
+                        label: 'Your Position',
+                        data: Array(smoothedRanks.length).fill(null),
+                        pointBackgroundColor: '#ff4757',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 3,
+                        pointRadius: 8,
+                        showLine: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 300,
+                            max: 1000,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            title: {
+                                display: true,
+                                text: 'GATE Score',
+                                color: 'white'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'white',
+                                maxRotation: 45
+                            },
+                            title: {
+                                display: true,
+                                text: 'Rank',
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Add user point to the graph
+            const closestIndex = smoothedRanks.reduce((closest, current, index) => {
+                return Math.abs(current - rank) < Math.abs(smoothedRanks[closest] - rank) ? index : closest;
+            }, 0);
+            
+            scoreChart.data.datasets[1].data[closestIndex] = score;
+            scoreChart.update();
+        }
 
         function switchCutoffTab(tabId) {
             // Update tab buttons
@@ -1182,76 +1847,43 @@
             }
         }
 
-        // Main prediction function - predicts everything at once
-        function predictEverything() {
-            // Show loading
-            document.getElementById('loading').style.display = 'block';
-            
-            // Get inputs
+        function updateCompetition() {
             const paper = document.getElementById('paperCode').value;
-            userCategory = document.getElementById('category').value;
-            const marks = parseFloat(document.getElementById('calculatedMarks').value) || 0;
-            userScore = parseFloat(document.getElementById('expectedScore').value) || 0;
+            const badge = document.getElementById('competitionBadge');
+            const cutoffInfo = document.getElementById('cutoffInfo');
             
-            if (marks === 0) {
-                alert('Please enter your answer details first');
-                document.getElementById('loading').style.display = 'none';
-                return;
+            if (paper === 'CS') {
+                badge.className = 'competition-badge high-competition';
+                badge.textContent = 'High Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 29.20 (2025)';
+            } else if (paper === 'CE') {
+                badge.className = 'competition-badge medium-competition';
+                badge.textContent = 'Medium Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 29.20 (2025)';
+            } else {
+                badge.className = 'competition-badge low-competition';
+                badge.textContent = 'Low Competition';
+                cutoffInfo.textContent = 'GEN Cutoff: 25.00 (2025)';
             }
-            
-            // Simulate processing
-            setTimeout(() => {
-                // Predict rank
-                const rankPrediction = predictRank(userScore, paper, userCategory);
-                
-                // Check qualification
-                const qualification = checkQualification(marks, paper, userCategory);
-                
-                // Predict college opportunities
-                const collegeOpportunities = predictCollegeOpportunities(userScore, paper);
-                
-                // Predict PSU opportunities
-                const psuOpportunities = predictPSUOpportunities(userScore, paper);
-                
-                // Calculate overall opportunity status
-                const overallStatus = calculateOverallStatus(collegeOpportunities, psuOpportunities);
-                
-                // Populate cutoff tables
-                populateIitCseTable();
-                populateNitCseTable();
-                populateTopIitsTable();
-                
-                // Display all results
-                displayAllResults(rankPrediction, marks, userScore, qualification, collegeOpportunities, psuOpportunities, overallStatus);
-                
-                // Create score graph
-                createScoreGraph(userScore, rankPrediction.rank);
-                
-                // Hide loading, show results
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('results').style.display = 'block';
-                document.getElementById('opportunitiesSection').style.display = 'block';
-                document.getElementById('cutoffSection').style.display = 'block';
-                
-                // Scroll to results
-                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
-            }, 1000);
         }
 
-        // Rest of the functions remain the same...
-        // calculateMarks, marksToScore, predictRank, estimateRankFromScore, 
-        // checkQualification, predictCollegeOpportunities, predictPSUOpportunities,
-        // calculateOverallStatus, displayAllResults, createScoreGraph, resetForm
+        function resetForm() {
+            document.getElementById('correct1').value = '';
+            document.getElementById('wrong1').value = '';
+            document.getElementById('correct2').value = '';
+            document.getElementById('wrong2').value = '';
+            document.getElementById('calculatedMarks').value = '';
+            document.getElementById('expectedScore').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('opportunitiesSection').style.display = 'none';
+            document.getElementById('cutoffSection').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         // Initialize
         window.onload = function() {
             updateCompetition();
-            // Pre-fill with sample data
-            document.getElementById('correct1').value = '18';
-            document.getElementById('wrong1').value = '4';
-            document.getElementById('correct2').value = '22';
-            document.getElementById('wrong2').value = '6';
-            calculateMarks();
+            fillSampleData(); // Auto-fill sample data for testing
         }
     </script>
 </body>
