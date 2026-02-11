@@ -1191,12 +1191,12 @@
                 { rank: 100, score: 850, marks: 72.00 },
                 { rank: 200, score: 840, marks: 70.00 },
                 { rank: 500, score: 800, marks: 68.00 },
-                { rank: 800, score: 750, marks: 65.00 },
-                { rank: 1000, score: 700, marks: 62.00 },
-                { rank: 2000, score: 650, marks: 58.00 },
-                { rank: 3000, score: 600, marks: 53.00 },
-                { rank: 4000, score: 550, marks: 48.00 },
-                { rank: 10000, score: 500, marks: 43.00 }
+                { rank: 1000, score: 750, marks: 65.00 },
+                { rank: 2000, score: 700, marks: 62.00 },
+                { rank: 5000, score: 650, marks: 58.00 },
+                { rank: 10000, score: 600, marks: 53.00 },
+                { rank: 15000, score: 550, marks: 48.00 },
+                { rank: 20000, score: 500, marks: 43.00 }
             ],
             "ME": [
                 { rank: 1, score: 1000, marks: 95.00 },
@@ -2037,7 +2037,6 @@
             const savedPredictions = localStorage.getItem('gatePredictions');
             if (savedPredictions) {
                 console.log("Saved predictions found:", JSON.parse(savedPredictions).length);
-    
             }
         });
     </script>
