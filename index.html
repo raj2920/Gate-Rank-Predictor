@@ -791,50 +791,56 @@
                     </div>
 
                     <div class="marks-type">
-                        <h4><i class="fas fa-1"></i> Type 1 Questions (1 Mark Each)</h4>
+                        <h4><i class="fas fa-1"></i> Type 1 Questions (1 Mark Each) - Total 30 Questions</h4>
                         <div class="marks-grid">
                             <div class="input-group">
                                 <label>Correct Answers</label>
-                                <input type="number" id="type1Correct" min="0" max="100" step="1" value="0" oninput="updateMarks()">
+                                <input type="number" id="type1Correct" min="0" max="30" step="1" value="0" oninput="updateMarks()">
                                 <div class="quick-buttons">
                                     <button class="quick-btn" onclick="setValue('type1Correct', 20)">20</button>
                                     <button class="quick-btn" onclick="setValue('type1Correct', 25)">25</button>
-                                    <button class="quick-btn" onclick="setValue('type1Correct', 30)">30</button>
+                                    <button class="quick-btn" onclick="setValue('type1Correct', 28)">28</button>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Wrong Answers</label>
-                                <input type="number" id="type1Wrong" min="0" max="100" step="1" value="0" oninput="updateMarks()">
+                                <input type="number" id="type1Wrong" min="0" max="30" step="1" value="0" oninput="updateMarks()">
                                 <div class="quick-buttons">
                                     <button class="quick-btn" onclick="setValue('type1Wrong', 0)">0</button>
+                                    <button class="quick-btn" onclick="setValue('type1Wrong', 3)">3</button>
                                     <button class="quick-btn" onclick="setValue('type1Wrong', 5)">5</button>
-                                    <button class="quick-btn" onclick="setValue('type1Wrong', 10)">10</button>
                                 </div>
                             </div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            <i class="fas fa-info-circle"></i> Total 1-mark questions: <span id="type1Total">0</span>/30
                         </div>
                     </div>
 
                     <div class="marks-type">
-                        <h4><i class="fas fa-2"></i> Type 2 Questions (2 Marks Each)</h4>
+                        <h4><i class="fas fa-2"></i> Type 2 Questions (2 Marks Each) - Total 35 Questions</h4>
                         <div class="marks-grid">
                             <div class="input-group">
                                 <label>Correct Answers</label>
-                                <input type="number" id="type2Correct" min="0" max="50" step="1" value="0" oninput="updateMarks()">
+                                <input type="number" id="type2Correct" min="0" max="35" step="1" value="0" oninput="updateMarks()">
                                 <div class="quick-buttons">
                                     <button class="quick-btn" onclick="setValue('type2Correct', 15)">15</button>
-                                    <button class="quick-btn" onclick="setValue('type2Correct', 18)">18</button>
                                     <button class="quick-btn" onclick="setValue('type2Correct', 20)">20</button>
+                                    <button class="quick-btn" onclick="setValue('type2Correct', 25)">25</button>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label>Wrong Answers</label>
-                                <input type="number" id="type2Wrong" min="0" max="50" step="1" value="0" oninput="updateMarks()">
+                                <input type="number" id="type2Wrong" min="0" max="35" step="1" value="0" oninput="updateMarks()">
                                 <div class="quick-buttons">
                                     <button class="quick-btn" onclick="setValue('type2Wrong', 0)">0</button>
                                     <button class="quick-btn" onclick="setValue('type2Wrong', 3)">3</button>
                                     <button class="quick-btn" onclick="setValue('type2Wrong', 5)">5</button>
                                 </div>
                             </div>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                            <i class="fas fa-info-circle"></i> Total 2-mark questions: <span id="type2Total">0</span>/35
                         </div>
                     </div>
 
@@ -1110,7 +1116,26 @@
 
         // Set value helper
         function setValue(elementId, value) {
-            document.getElementById(elementId).value = value;
+            const inputElement = document.getElementById(elementId);
+            const otherElementId = elementId.includes('Correct') ? 
+                                  elementId.replace('Correct', 'Wrong') : 
+                                  elementId.replace('Wrong', 'Correct');
+            const otherElement = document.getElementById(otherElementId);
+            
+            // Check if sum exceeds the limit
+            const totalLimit = elementId.includes('type1') ? 30 : 35;
+            const currentOtherValue = parseInt(otherElement.value) || 0;
+            const newTotal = currentOtherValue + value;
+            
+            if (newTotal > totalLimit) {
+                // If exceeds limit, adjust the other value
+                const excess = newTotal - totalLimit;
+                otherElement.value = Math.max(0, currentOtherValue - excess);
+                inputElement.value = value;
+            } else {
+                inputElement.value = value;
+            }
+            
             updateMarks();
             
             const buttons = document.querySelectorAll(`[onclick*="${elementId}"]`);
@@ -1129,6 +1154,32 @@
             const type2Correct = parseInt(document.getElementById('type2Correct').value) || 0;
             const type2Wrong = parseInt(document.getElementById('type2Wrong').value) || 0;
             
+            // Validate totals
+            const type1Total = type1Correct + type1Wrong;
+            const type2Total = type2Correct + type2Wrong;
+            
+            // Update total displays
+            document.getElementById('type1Total').textContent = type1Total;
+            document.getElementById('type2Total').textContent = type2Total;
+            
+            // Highlight if totals exceed limits
+            if (type1Total > 30) {
+                document.getElementById('type1Total').style.color = 'var(--danger)';
+                document.getElementById('type1Total').style.fontWeight = 'bold';
+            } else {
+                document.getElementById('type1Total').style.color = '#666';
+                document.getElementById('type1Total').style.fontWeight = 'normal';
+            }
+            
+            if (type2Total > 35) {
+                document.getElementById('type2Total').style.color = 'var(--danger)';
+                document.getElementById('type2Total').style.fontWeight = 'bold';
+            } else {
+                document.getElementById('type2Total').style.color = '#666';
+                document.getElementById('type2Total').style.fontWeight = 'normal';
+            }
+            
+            // Calculate marks
             const type1Marks = type1Correct - (type1Wrong * 0.33);
             const type2Marks = (type2Correct * 2) - (type2Wrong * 0.67);
             const totalMarks = type1Marks + type2Marks;
@@ -1481,17 +1532,31 @@
 
         // Main prediction function
         function predictRank() {
+            const type1Correct = parseInt(document.getElementById('type1Correct').value) || 0;
+            const type1Wrong = parseInt(document.getElementById('type1Wrong').value) || 0;
+            const type2Correct = parseInt(document.getElementById('type2Correct').value) || 0;
+            const type2Wrong = parseInt(document.getElementById('type2Wrong').value) || 0;
+            
+            // Validate totals before proceeding
+            const type1Total = type1Correct + type1Wrong;
+            const type2Total = type2Correct + type2Wrong;
+            
+            if (type1Total > 30) {
+                alert("Error: Total 1-mark questions (correct + wrong) cannot exceed 30. Please adjust your inputs.");
+                return;
+            }
+            
+            if (type2Total > 35) {
+                alert("Error: Total 2-mark questions (correct + wrong) cannot exceed 35. Please adjust your inputs.");
+                return;
+            }
+            
             document.getElementById('loading').style.display = 'block';
             document.getElementById('resultsSection').classList.remove('visible');
             
             setTimeout(() => {
                 const paper = document.getElementById('paper').value;
                 const category = currentCategory;
-                
-                const type1Correct = parseInt(document.getElementById('type1Correct').value) || 0;
-                const type1Wrong = parseInt(document.getElementById('type1Wrong').value) || 0;
-                const type2Correct = parseInt(document.getElementById('type2Correct').value) || 0;
-                const type2Wrong = parseInt(document.getElementById('type2Wrong').value) || 0;
                 
                 const type1Marks = type1Correct - (type1Wrong * 0.33);
                 const type2Marks = (type2Correct * 2) - (type2Wrong * 0.67);
@@ -1536,10 +1601,16 @@
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', function() {
-            setValue('type1Correct', 25);
-            setValue('type1Wrong', 5);
-            setValue('type2Correct', 18);
-            setValue('type2Wrong', 3);
+            // Set initial values within limits
+            document.getElementById('type1Correct').setAttribute('max', 30);
+            document.getElementById('type1Wrong').setAttribute('max', 30);
+            document.getElementById('type2Correct').setAttribute('max', 35);
+            document.getElementById('type2Wrong').setAttribute('max', 35);
+            
+            setValue('type1Correct', 20);
+            setValue('type1Wrong', 3);
+            setValue('type2Correct', 15);
+            setValue('type2Wrong', 2);
             
             updateMarks();
             document.getElementById('resultsSection').classList.remove('visible');
