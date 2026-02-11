@@ -425,6 +425,49 @@
             color: #666;
         }
 
+        /* Analysis Box - MOVED POSITION */
+        .analysis-box {
+            background: linear-gradient(135deg, #fff8e1, #ffeaa7);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid var(--warning);
+        }
+
+        .analysis-box h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .analysis-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+
+        .excellent {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .good {
+            color: #3498db;
+            font-weight: 700;
+        }
+
+        .average {
+            color: var(--warning);
+            font-weight: 700;
+        }
+
+        .improve {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
         /* PSU Chances Section */
         .psu-section {
             background: linear-gradient(135deg, #fff0e1, #ffe3b3);
@@ -744,49 +787,6 @@
             font-weight: 600;
         }
 
-        /* Analysis Box */
-        .analysis-box {
-            background: linear-gradient(135deg, #fff8e1, #ffeaa7);
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 30px;
-            border-left: 5px solid var(--warning);
-        }
-
-        .analysis-box h4 {
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .analysis-text {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #2c3e50;
-        }
-
-        .excellent {
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .good {
-            color: #3498db;
-            font-weight: 700;
-        }
-
-        .average {
-            color: var(--warning);
-            font-weight: 700;
-        }
-
-        .improve {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
         /* Share Buttons */
         .share-buttons {
             display: flex;
@@ -978,7 +978,7 @@
                     </div>
 
                     <div class="note-box" style="background: #fff8e1; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 0.9rem;">
-                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> GATE 2026 cutoffs expected to increase by 1.5 marks. SC/ST categories have lower cutoffs for IIT admissions.</p>
+                        <p><i class="fas fa-info-circle"></i> <strong>Note:</strong> This GATE Rank Predictor estimates your expected rank and score.Actual results may differ due to normalization, competition level, and official evaluation.</p>
                     </div>
                 </div>
             </div>
@@ -1063,7 +1063,7 @@
                     <div class="result-card">
                         <h4><i class="fas fa-chart-bar"></i> Rank Range</h4>
                         <div class="card-value" id="rankRange">--</div>
-                        <div class="card-label" id="rangeLabel">±15% variation</div>
+                        <div class="card-label">±15% variation</div>
                     </div>
                 </div>
 
@@ -1072,6 +1072,14 @@
                     <h4><i class="fas fa-university"></i> IIT Admission Chances (Based on Your Category)</h4>
                     <div id="iitGridContainer">
                         <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Analysis Box - MOVED HERE (below IIT Admission) -->
+                <div class="analysis-box">
+                    <h4><i class="fas fa-lightbulb"></i> Analysis & Insights</h4>
+                    <div class="analysis-text" id="analysisText">
+                        Enter your marks and click predict to see detailed analysis...
                     </div>
                 </div>
 
@@ -1088,14 +1096,6 @@
                     <h4><i class="fas fa-flag-checkered"></i> GATE 2026 Expected Cutoff Marks</h4>
                     <div id="cutoffTableContainer">
                         <!-- Will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Analysis Box -->
-                <div class="analysis-box">
-                    <h4><i class="fas fa-lightbulb"></i> Analysis & Insights</h4>
-                    <div class="analysis-text" id="analysisText">
-                        Enter your marks and click predict to see detailed analysis...
                     </div>
                 </div>
 
@@ -1191,12 +1191,12 @@
                 { rank: 100, score: 850, marks: 72.00 },
                 { rank: 200, score: 840, marks: 70.00 },
                 { rank: 500, score: 800, marks: 68.00 },
-                { rank: 1000, score: 750, marks: 65.00 },
-                { rank: 2000, score: 700, marks: 62.00 },
-                { rank: 5000, score: 650, marks: 58.00 },
-                { rank: 10000, score: 600, marks: 53.00 },
-                { rank: 15000, score: 550, marks: 48.00 },
-                { rank: 20000, score: 500, marks: 43.00 }
+                { rank: 800, score: 750, marks: 65.00 },
+                { rank: 1000, score: 700, marks: 62.00 },
+                { rank: 2000, score: 650, marks: 58.00 },
+                { rank: 3000, score: 600, marks: 53.00 },
+                { rank: 4000, score: 550, marks: 48.00 },
+                { rank: 10000, score: 500, marks: 43.00 }
             ],
             "ME": [
                 { rank: 1, score: 1000, marks: 95.00 },
@@ -1234,18 +1234,6 @@
                 { rank: 15000, score: 550, marks: 50.00 },
                 { rank: 20000, score: 500, marks: 45.00 }
             ]
-        };
-
-        // Branch-specific rank variation percentages
-        const rankVariation = {
-            "CS": { lower: 15, upper: 17, label: "±15-17% variation" },
-            "EE": { lower: 2, upper: 3, label: "±2-3% variation" },
-            "CE": { lower: 8, upper: 10, label: "±8-10% variation" },
-            "ME": { lower: 1, upper: 2, label: "±1-2% variation" },
-            "EC": { lower: 7, upper: 10, label: "±7-10% variation" },
-            "DA": { lower: 10, upper: 12, label: "±10-12% variation" },
-            "IN": { lower: 5, upper: 7, label: "±5-7% variation" },
-            "CH": { lower: 6, upper: 8, label: "±6-8% variation" }
         };
 
         // GATE 2025 Cutoffs with 2026 projections (+1.5 marks)
@@ -1448,28 +1436,6 @@
             document.getElementById('type2Details').textContent = `${type2Correct}✓ ${type2Wrong}✗`;
             
             document.getElementById('resultsSection').classList.remove('visible');
-        }
-
-        // Get rank variation for branch
-        function getRankVariation(paper) {
-            return rankVariation[paper] || rankVariation["CS"];
-        }
-
-        // Calculate rank range with branch-specific variation
-        function calculateRankRange(rank, paper) {
-            const variation = getRankVariation(paper);
-            const lowerVariation = variation.lower;
-            const upperVariation = variation.upper;
-            
-            // Calculate lower and upper bounds
-            const rankLower = Math.max(1, Math.round(rank * (1 - lowerVariation/100)));
-            const rankUpper = Math.round(rank * (1 + upperVariation/100));
-            
-            return {
-                lower: rankLower,
-                upper: rankUpper,
-                label: variation.label
-            };
         }
 
         // Create IIT Admission Grid
@@ -1764,7 +1730,7 @@
         }
 
         // Get analysis text with category-specific IIT info
-        function getAnalysisText(rank, marks, score, qualified, paper, category, variation) {
+        function getAnalysisText(rank, marks, score, qualified, paper, category) {
             const categoryName = { GEN: "General", OBC: "OBC-NCL", EWS: "EWS", SC: "SC", ST: "ST", PWD: "PwD" }[category];
             const paperName = {
                 "CE": "Civil Engineering", "ME": "Mechanical", "EE": "Electrical",
@@ -1774,14 +1740,11 @@
             
             let analysis = '';
             
-            // Add variation information
-            analysis += `<span class="good">Branch-Specific Variation:</span> ${variation.label} applied for ${paperName} predictions.<br><br>`;
-            
             // Category-specific IIT information
             if (category === 'SC' || category === 'ST') {
-                analysis += `<span class="good">SC/ST Category Advantage:</span> Many IITs offer admission with marks in the range of <strong>38-53</strong> for your category.<br><br>`;
+                analysis = `<span class="good">SC/ST Category Advantage:</span> Many IITs offer admission with marks in the range of <strong>38-53</strong> for your category.<br><br>`;
             } else if (category === 'OBC' || category === 'EWS') {
-                analysis += `<span class="good">OBC/EWS Category Benefit:</span> Cutoffs are typically <strong>5-10 marks lower</strong> than General category.<br><br>`;
+                analysis = `<span class="good">OBC/EWS Category Benefit:</span> Cutoffs are typically <strong>5-10 marks lower</strong> than General category.<br><br>`;
             }
             
             if (qualified) {
@@ -2003,9 +1966,8 @@
                 const predictedRank = calculateRankFromMarks(userMarks, paper);
                 const predictedScore = calculateScoreFromMarks(userMarks, paper);
                 const percentile = calculatePercentile(predictedRank, paper);
-                
-                // Get branch-specific rank range
-                const rankRange = calculateRankRange(predictedRank, paper);
+                const rankLower = Math.max(1, Math.round(predictedRank * 0.85));
+                const rankUpper = Math.round(predictedRank * 1.15);
                 
                 const requiredCutoff = getCutoff(paper, category);
                 const qualified = userMarks >= requiredCutoff;
@@ -2022,10 +1984,7 @@
                     type1Correct,
                     type1Wrong,
                     type2Correct,
-                    type2Wrong,
-                    rankLower: rankRange.lower,
-                    rankUpper: rankRange.upper,
-                    variationLabel: rankRange.label
+                    type2Wrong
                 };
                 
                 document.getElementById('type1Marks').textContent = type1Marks.toFixed(2);
@@ -2037,8 +1996,7 @@
                 document.getElementById('predictedRank').textContent = predictedRank.toLocaleString();
                 document.getElementById('predictedScore').textContent = predictedScore;
                 document.getElementById('percentile').textContent = percentile + '%';
-                document.getElementById('rankRange').textContent = `${rankRange.lower.toLocaleString()} - ${rankRange.upper.toLocaleString()}`;
-                document.getElementById('rangeLabel').textContent = rankRange.label;
+                document.getElementById('rankRange').textContent = `${rankLower.toLocaleString()} - ${rankUpper.toLocaleString()}`;
                 
                 getQualificationStatus(qualified, userMarks, requiredCutoff, paper, category);
                 
@@ -2048,7 +2006,7 @@
                 
                 document.getElementById('psuGridContainer').innerHTML = createPSUChancesGrid(paper, userMarks);
                 
-                document.getElementById('analysisText').innerHTML = getAnalysisText(predictedRank, userMarks, predictedScore, qualified, paper, category, rankRange);
+                document.getElementById('analysisText').innerHTML = getAnalysisText(predictedRank, userMarks, predictedScore, qualified, paper, category);
                 
                 updateChart(userMarks, predictedRank, paper);
                 
@@ -2079,6 +2037,7 @@
             const savedPredictions = localStorage.getItem('gatePredictions');
             if (savedPredictions) {
                 console.log("Saved predictions found:", JSON.parse(savedPredictions).length);
+    
             }
         });
     </script>
