@@ -1416,16 +1416,17 @@
         // 2024 TOPPER MARKS FOR OTHER BRANCHES (Your Data)
         // =====================================================
         const branchTopper2024 = {
+            "CS": 100.00,
             "CE": 89.02,
-            "ME": 85.0,  // Your opinion: ME paper harder, rank 1 around 85
-            "ECE": 82.67,
+            "ME": 85.0,
             "EE": 81.67,
-            "IN": 79.5,   // Derived from EE trend
-            "PI": 78.0,    // Derived from ME trend
-            "DA": 87.0,    // New paper, slightly below CS
-            "XE": 76.0,    // Engineering Sciences
-            "ES": 75.0,    // Environmental Science
-            "CH": 83.0     // Chemical Engineering
+            "ECE": 82.67,
+            "IN": 79.5,
+            "PI": 78.0,
+            "DA": 87.0,
+            "XE": 76.0,
+            "ES": 75.0,
+            "CH": 83.0
         };
 
         // =====================================================
@@ -1447,39 +1448,75 @@
         };
 
         // =====================================================
-        // 2026 STUDENT COUNTS (±5% change as per your instruction)
+        // 2026 STUDENT COUNTS (realistic projections)
         // =====================================================
         
         const students2026 = {
-            "CS": 191395,  // 170888 * 1.12 (12% increase for CSE only)
-            "CE": Math.round(79000 * 1.05),  // 5% increase
-            "EE": Math.round(67700 * 1.02),  // 2% increase
-            "ECE": Math.round(81500 * 1.05), // 5% increase
-            "ME": Math.round(62000 * 0.97),  // 3% decrease
-            "DA": Math.round(60000 * 1.05),  // 5% increase
-            "IN": 35000,   // No change
-            "PI": 25000,   // No change
-            "XE": 20000,   // No change
-            "ES": 18000,   // No change
-            "CH": 30000    // No change
+            "CS": 191395,  // 170888 * 1.12 (12% increase)
+            "CE": Math.round(79000 * 1.08),  // 8% increase
+            "EE": Math.round(67700 * 1.05),  // 5% increase
+            "ECE": Math.round(81500 * 1.07), // 7% increase
+            "ME": Math.round(62000 * 1.03),  // 3% increase
+            "DA": Math.round(60000 * 1.10),  // 10% increase
+            "IN": Math.round(35000 * 1.02),  // 2% increase
+            "PI": Math.round(25000 * 1.02),  // 2% increase
+            "XE": Math.round(20000 * 1.01),  // 1% increase
+            "ES": Math.round(18000 * 1.01),  // 1% increase
+            "CH": Math.round(30000 * 1.03)   // 3% increase
         };
 
         // =====================================================
-        // GENERATE BRANCH-SPECIFIC DATA BASED ON CSE PATTERN
+        // SPECIFIC TARGET VALUES FOR 47 MARKS (Your examples)
         // =====================================================
         
-        function generateBranchDataFromCSE(cseData, topperMarks, studentCount2025, studentCount2026) {
-            const scaleFactor = topperMarks / 100.0;
-            const competitionFactor = studentCount2026 / studentCount2025;
+        const targetRanksAt47 = {
+            "EE": 670,
+            "ECE": 900,
+            "ME": 1000,
+            "CE": 1200
+        };
+
+        const targetScoresAt47 = {
+            "EE": 650,
+            "ECE": 620,
+            "ME": 580,
+            "CE": 560
+        };
+
+        // =====================================================
+        // GENERATE BRANCH-SPECIFIC DATA WITH CORRECT CALIBRATION
+        // =====================================================
+        
+        function generateBranchData(paper) {
+            if (paper === "CS") {
+                // CS uses original data with 12% competition increase
+                return cse2025Data.map(point => ({
+                    rank: Math.round(point.rank * 1.12),
+                    marks: point.marks,
+                    score: point.score
+                }));
+            }
             
-            // Create branch data by scaling CSE marks and adjusting ranks
-            const branchData = cseData.map(point => {
-                // Scale marks proportionally
+            const topperMarks = branchTopper2024[paper];
+            const scaleFactor = topperMarks / 100.0;
+            
+            // Competition factor relative to CS
+            const csStudents2026 = students2026["CS"];
+            const branchStudents2026 = students2026[paper];
+            const competitionRatio = branchStudents2026 / csStudents2026;
+            
+            // Start with base CSE data
+            const baseData = [...cse2025Data];
+            
+            // Scale marks to match branch topper
+            const scaledData = baseData.map(point => {
                 const scaledMarks = point.marks * scaleFactor;
-                // Scale score proportionally
-                const scaledScore = Math.round(point.score * scaleFactor);
-                // Adjust rank based on competition (more students = higher rank for same marks)
-                const adjustedRank = Math.round(point.rank * competitionFactor);
+                const scaledScore = Math.round(point.score * scaleFactor * 0.95); // Score slightly lower for non-CS
+                
+                // Adjust rank based on competition (lower competition = better rank for same marks)
+                // Inverse relationship: fewer students = lower rank number
+                const rankMultiplier = competitionRatio * 1.2; // Calibration factor
+                const adjustedRank = Math.max(1, Math.round(point.rank * rankMultiplier));
                 
                 return {
                     rank: adjustedRank,
@@ -1488,34 +1525,67 @@
                 };
             });
             
-            // Sort by rank
-            return branchData.sort((a, b) => a.rank - b.rank);
+            // Sort by marks descending for proper interpolation
+            scaledData.sort((a, b) => b.marks - a.marks);
+            
+            // Apply specific calibration for target values at 47 marks
+            if (targetRanksAt47[paper]) {
+                // Find the data point closest to 47 marks and adjust the entire curve
+                const targetRank = targetRanksAt47[paper];
+                const targetScore = targetScoresAt47[paper];
+                
+                // Find where 47 marks falls in the scaled data
+                let rankAt47 = scaledData.length;
+                let scoreAt47 = 0;
+                
+                for (let i = 0; i < scaledData.length - 1; i++) {
+                    if (47 <= scaledData[i].marks && 47 > scaledData[i + 1].marks) {
+                        const higher = scaledData[i];
+                        const lower = scaledData[i + 1];
+                        
+                        const marksDiff = higher.marks - lower.marks;
+                        const rankDiff = lower.rank - higher.rank;
+                        const fraction = (higher.marks - 47) / marksDiff;
+                        
+                        rankAt47 = Math.round(higher.rank + (fraction * rankDiff));
+                        
+                        const scoreDiff = lower.score - higher.score;
+                        scoreAt47 = Math.round(higher.score + (fraction * scoreDiff));
+                        break;
+                    }
+                }
+                
+                // Calculate correction factors
+                const rankCorrection = targetRank / rankAt47;
+                const scoreCorrection = targetScore / scoreAt47;
+                
+                // Apply corrections to all data points
+                return scaledData.map(point => ({
+                    rank: Math.max(1, Math.round(point.rank * rankCorrection * 0.98)), // Slight adjustment for smoothness
+                    marks: point.marks,
+                    score: Math.round(point.score * scoreCorrection * 0.99)
+                })).sort((a, b) => a.rank - b.rank);
+            }
+            
+            return scaledData.sort((a, b) => a.rank - b.rank);
         }
 
         // =====================================================
         // GENERATE DATA FOR ALL BRANCHES
         // =====================================================
         
-        // CSE - Keep original data with 12% competition increase
-        const cse2026Data = cse2025Data.map(point => ({
-            rank: Math.round(point.rank * 1.12),
-            marks: point.marks,
-            score: point.score
-        }));
-
-        // Generate data for other branches
         const branchRankData = {
-            "CS": cse2026Data,
-            "CE": generateBranchDataFromCSE(cse2025Data, branchTopper2024["CE"], students2025["CE"], students2026["CE"]),
-            "ME": generateBranchDataFromCSE(cse2025Data, branchTopper2024["ME"], students2025["ME"], students2026["ME"]),
-            "EE": generateBranchDataFromCSE(cse2025Data, branchTopper2024["EE"], students2025["EE"], students2026["EE"]),
-            "ECE": generateBranchDataFromCSE(cse2025Data, branchTopper2024["ECE"], students2025["ECE"], students2026["ECE"]),
-            "IN": generateBranchDataFromCSE(cse2025Data, branchTopper2024["IN"], students2025["IN"], students2026["IN"]),
-            "PI": generateBranchDataFromCSE(cse2025Data, branchTopper2024["PI"], students2025["PI"], students2026["PI"]),
-            "DA": generateBranchDataFromCSE(cse2025Data, branchTopper2024["DA"], students2025["DA"], students2026["DA"]),
-            "XE": generateBranchDataFromCSE(cse2025Data, branchTopper2024["XE"], students2025["XE"], students2026["XE"]),
-            "ES": generateBranchDataFromCSE(cse2025Data, branchTopper2024["ES"], students2025["ES"], students2026["ES"]),
-            "CH": generateBranchDataFromCSE(cse2025Data, branchTopper2024["CH"], students2025["CH"], students2026["CH"])
+            "CS": generateBranchData("CS"),
+            "CE": generateBranchData("CE"),
+            "ME": generateBranchData("ME"),
+            "EE": generateBranchData("EE"),
+            "ECE": generateBranchData("ECE"),
+            "IN": generateBranchData("IN"),
+            "PI": generateBranchData("PI"),
+            "DA": generateBranchData("DA"),
+            "XE": generateBranchData("XE"),
+            "ES": generateBranchData("ES"),
+            "CH": generateBranchData("CH")
         };
 
         // =====================================================
